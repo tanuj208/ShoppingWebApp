@@ -3,7 +3,7 @@ import os
 
 app=Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['POST','GET'])
 def index():
 	return render_template("homepage.html")
 
@@ -21,6 +21,10 @@ def login():
 			session['logged_in']=False
 			flash('wrong password!')
 			return render_template("login.html")
+
+@app.route('/signup')
+def signupform():
+	return render_template('signup.html')
 
 if __name__=='__main__':
 	app.secret_key=os.urandom(12)
