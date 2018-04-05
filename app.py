@@ -1,7 +1,18 @@
 from flask import *
+from flask_sqlalchemy import SQLAlchemy 
 import os
 
 app=Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'
+db = SQLAlchemy(app)
+
+class User(db.Model):
+	__tablename__ = "User"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    email = db.Column(db.Sring(255), unique=True)
+    phone = db.Column(db.Integer,unique=True)
+    password = db.Column(db.String(255))
 
 @app.route('/', methods=['POST','GET'])
 def index():
@@ -28,4 +39,5 @@ def signupform():
 
 if __name__=='__main__':
 	app.secret_key=os.urandom(12)
+	db.create_all()
 	app.run(debug=True)
