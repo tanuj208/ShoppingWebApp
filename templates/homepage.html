@@ -4,6 +4,10 @@
 	<title>MyCart</title>
 </head>
 <body>
-	<a href="{{ url_for('login')}}">Login and Signup</a>
+	{% if session['logged_in'] %}
+	<p>Hello Admin</p>
+	{% else %}
+	<a href="/loginform">Login and Signup</a>
+	{% endif %}
 </body>
 </html>
