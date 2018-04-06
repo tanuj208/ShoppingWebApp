@@ -1,14 +1,38 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 	<title>Signup</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> 
 </head>
 <body>
-	<form action="/signup" method="POST">
-		<input type="username" name="name" placeholder="Name"><br>
-		<input type="tel" name="mobile" placeholder="Mobile Number"><br>
-		<input type="email" name="email" placeholder="Email Id"><br> 
-		<input type="password" name="password" placeholder="Password"><br>
-		<input type="submit" value="Continue"><br>
+	<div class="container">
+		<h1 class="text-center">Create account</h1>
+		<form action="/signup" method="POST">
+			<div class="jumbotron">
+				<div class="form-group">
+					<label for="username">Username</label>
+					<input type="username" class="form-control" id="username" placeholder="Enter username">
+				</div>
+				<div class="form-group">
+					<label for="tel">Mobile Number</label>
+					<input type="tel" class="form-control" id="phone" placeholder="Enter mobile number">
+				</div>
+				<div class="form-group">
+					<label for="email">Email</label>
+					<input type="email" class="form-control" id="email" placeholder="Enter email">
+				</div>
+				<div class="form-group">
+					<label for="pwd">Password</label>
+					<input type="password" class="form-control" id="pwd" placeholder="Enter password">
+				</div>
+				<input type="submit" class="btn btn-info" value="Continue"><br>
+			</div>
+		</form>
+	</div>
 </body>
 </html>

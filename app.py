@@ -1,24 +1,20 @@
 from flask import *
-from flask_sqlalchemy import SQLAlchemy 
+from sqlalchemy import *
 import os
 
+engine=create_engine('sqlite:///:memory:',echo=True)
+
 app=Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer.db'
-db = SQLAlchemy(app)
+metadata=MetaData()
 
-class User(db.Model):
-	__tablename__ = "User"
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(255))
-	email = db.Column(db.String(255), unique=True)
-	phone = db.Column(db.Integer,unique=True)
-	password = db.Column(db.String(255))
-
-	def __init__(self,name,email,mobile,password):
-		self.name=name
-		self.email=email
-		self.mobile=mobile
-		self.password=password
+users=Table('Users',metadata,
+	Column('id',Integer,Sequence('user_id_seq'),primary_key=True),
+	Column('name',String(255)),
+	Column('email',String(255)),
+	Column('mobile',String(15)),
+	Column('password',String(25))
+	)
+metadata.create_all(engine)
 
 @app.route('/', methods=['POST','GET'])
 def index():
@@ -50,12 +46,11 @@ def signup():
 		name=str(request.form['name'])
 		mobile=str(request.form['mobile'])
 		password=str(request.form['password'])
-		user=User(name,email,mobile,password)
-		db.session.add(user)
-		db.session.commit()
+		ins=users.insert().values(name=name,email=email,mobile=mobile,password=password)
+		conn=engine.connect()
+		conn.execute(ins)
 		return index()
 
 if __name__=='__main__':
 	app.secret_key=os.urandom(12)
-	db.create_all()
 	app.run(debug=True)
