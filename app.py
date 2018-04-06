@@ -44,10 +44,11 @@ def signup():
 	if request.method=='POST':
 		email=str(request.form['email'])
 		name=str(request.form['name'])
-		mobile=str(request.form['mobile'])
+		mobile=str(request.form['tel'])
 		password=str(request.form['password'])
 		ins=users.insert().values(name=name,email=email,mobile=mobile,password=password)
 		conn=engine.connect()
+		metadata.create_all(engine)
 		conn.execute(ins)
 		return index()
 
