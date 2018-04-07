@@ -10,10 +10,10 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> 
 </head>
 <body>
-	{% if isloggedin %}
-	<p>Hello {{ name }}</p>
+	{% if 'user' in session %}
+	<p>Hello {{ session['user'] }}</p>
 	{% else %}
-	<a href="/loginform">Login and Signup</a>
+	<a href="/login">Login and Signup</a>
 	{% endif %}
 </body>
 </html>

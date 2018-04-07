@@ -11,9 +11,9 @@ class User(Base):
 	__tablename__ = "user"
 
 	id = Column('id', Integer,Sequence('user_id_seq'),primary_key=True)
-	name = Column('name',String(255),unique = True)
-	email = Column('email',String(255))
-	mobile = Column('mobile',String(15))
+	name = Column('name',String(255))
+	email = Column('email',String(255),unique= True)
+	mobile = Column('mobile',String(15),unique=True)
 	password = Column('password',String(25))
 
 	def __repr__(self):
@@ -28,27 +28,17 @@ sqlsession = Session()
 
 @app.route('/', methods=['POST','GET'])
 def index(name=None,log=False):
-	return render_template("homepage.html",name=name,isloggedin=log)
-
-@app.route('/loginform')
-def loginform():
-	return render_template('login.html')
+	return render_template("homepage.html")
 
 @app.route('/login', methods=['POST','GET'])
 def login():
 	if request.method=='POST':
 		if request.form['password']=='password' and request.form['email']=='abc@abc.com':
-			# session['logged_in']=True
-			return index(name = "ADMIN",log=True)
-			# return redirect(url_for('index'))
+			return index()
 		else:
-			# session['logged_in']=False
 			flash('wrong password!')
 			return render_template("login.html")
-
-@app.route('/signupform')
-def signupform():
-	return render_template('signup.html')
+	return render_template('login.html')
 
 @app.route('/signup', methods=['POST','GET'])
 def signup():
@@ -59,9 +49,10 @@ def signup():
 		user.mobile=str(request.form['tel'])
 		user.password=str(request.form['password'])
 		sqlsession.add(user)
-		sqlsession.commit()	
-
-		return index(name = user.name,log=True)
+		sqlsession.commit()
+		session['user']=user.name
+		return index()
+	return render_template('signup.html')
 
 @app.route('/usertable')
 def usertable():
