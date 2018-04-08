@@ -2,10 +2,12 @@ from flask import *
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker,relationship
+from flask.ext.hashing import Hashing
 import os
 
 app=Flask(__name__)
 Base = declarative_base()
+hashing=Hashing(app)
 
 class User(Base):
 	__tablename__ = "user"
@@ -34,14 +36,14 @@ def index(name=None):
 @app.route('/login', methods=['POST','GET'])
 def login():
 	if request.method=='POST':
-		password=str(request.form['password'])
+		password=hashing.hash_value(str(request.form['password']),salt='abcd')
 		email=str(request.form['email'])
 		user = sqlsession.query(User).filter_by(email=email).first()
-		if email=='' or password=='':
+		if email=='' or hashing.check_value(password,'',salt='abcd'):
 			return render_template("login.html",error="Fields can't be empty")
 		if user is None:
 			return render_template("login.html",error="Email does not exist!")
-		elif user.password==password:
+		elif hashing.check_value(user.password,password,salt='abcd'):
 			sqlsession.add(user)
 			sqlsession.commit()
 			session['user']=user.name
@@ -58,10 +60,10 @@ def signup():
 		user.email=str(request.form['email'])
 		user.name=str(request.form['name'])
 		user.mobile=str(request.form['tel'])
-		user.password=str(request.form['password'])
-		confirm=str(request.form['confirmation'])
+		user.password=hashing.hash_value(str(request.form['password']),salt='abcd')
+		confirm=hashing.hash_value(str(request.form['confirmation']),salt='abcd')
 
-		if user.email=='' or user.name=='' or user.mobile=='' or user.password=='':
+		if user.email=='' or user.name=='' or user.mobile=='' or hashing.check_value(user.password,'',salt='abcd'):
 			error="Field can't be empty"
 
 		elif len(user.password)<8:
