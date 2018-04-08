@@ -9,6 +9,7 @@
 	<table border = 1 cellspacing=5 width=50% height=50px bgcolor="#ffff9f">
 	<tr>
 		<th>ID</td>
+		<th>Username</th>
 		<th>Name</td>
 		<th>Email</td>
 		<th>Phone</td>
@@ -18,6 +19,7 @@
 	{% for row in rows if row["id"] %}
 	<tr>
 		<td>{{row["id"]}}</td>
+		<td>{{row["username"]}}</td>
 		<td>{{row["name"]}}</td>
 		<td>{{row["email"]}}</td>
 		<td>{{row["mobile"]}}</td>

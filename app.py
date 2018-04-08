@@ -13,13 +13,14 @@ class User(Base):
 	__tablename__ = "user"
 
 	id = Column('id', Integer,Sequence('user_id_seq'),primary_key=True)
+	username=Column('username',String(255))
 	name = Column('name',String(255))
 	email = Column('email',String(255))
 	mobile = Column('mobile',String(15))
 	password = Column('password',String(25))
 
 	def __repr__(self):
-		return "<User(name='%s', email='%s', mobile='%s', password='%s')>" %(self.name,self.email,self.mobile,self.password) 
+		return "<User(username='%s' name='%s', email='%s', mobile='%s', password='%s')>" %(self.username,self.name,self.email,self.mobile,self.password) 
 
 engine=create_engine('sqlite:///user.db',echo=True)
 
@@ -29,20 +30,20 @@ Session = sessionmaker(bind=engine)
 sqlsession = Session()
 
 @app.route('/')
-@app.route('/<name>')
-def index(name=None):
+@app.route('/<username>')
+def index(username=None):
 	return render_template("homepage.html")
 
 @app.route('/login', methods=['POST','GET'])
 def login():
 	if request.method=='POST':
 		password=hashing.hash_value(str(request.form['password']),salt='abcd')
-		email=str(request.form['email'])
-		user = sqlsession.query(User).filter_by(email=email).first()
-		if email=='' or hashing.check_value(password,'',salt='abcd'):
+		username=str(request.form['username'])
+		user = sqlsession.query(User).filter_by(username=username).first()
+		if username=='' or hashing.check_value(password,'',salt='abcd'):
 			return render_template("login.html",error="Fields can't be empty")
 		if user is None:
-			return render_template("login.html",error="Email does not exist!")
+			return render_template("login.html",error="Username does not exist!")
 		elif hashing.check_value(user.password,password,salt='abcd'):
 			sqlsession.add(user)
 			sqlsession.commit()
@@ -57,13 +58,14 @@ def signup():
 	if request.method=='POST':
 		error=None
 		user = User()
+		user.username=str(request.form['username'])
 		user.email=str(request.form['email'])
 		user.name=str(request.form['name'])
 		user.mobile=str(request.form['tel'])
 		user.password=hashing.hash_value(str(request.form['password']),salt='abcd')
 		confirm=hashing.hash_value(str(request.form['confirmation']),salt='abcd')
 
-		if user.email=='' or user.name=='' or user.mobile=='' or hashing.check_value(user.password,'',salt='abcd'):
+		if user.username=='' or user.email=='' or user.name=='' or user.mobile=='' or hashing.check_value(user.password,'',salt='abcd'):
 			error="Field can't be empty"
 
 		elif len(user.password)<8:
@@ -72,19 +74,22 @@ def signup():
 		elif confirm!=user.password:
 			error="Passwords do not match"
 
+		elif sqlsession.query(User).filter_by(username=user.username).first() is not None:
+			error="Username already exists"
+
 		elif sqlsession.query(User).filter_by(email=user.email).first() is not None:
-			error="Email exists"
+			error="Email already exists"
 
 		elif sqlsession.query(User).filter_by(mobile=user.mobile).first() is not None:
-			error="Mobile number exists"
+			error="Mobile number already exists"
 
 		if error:
 			return render_template('signup.html',error=error)
 
 		sqlsession.add(user)
 		sqlsession.commit()
-		session['user']=user.name
-		return redirect(url_for('index',name=user.name))
+		session['user']=user.username
+		return redirect(url_for('index',username=user.username))
 	return render_template('signup.html',error=None)
 
 @app.route('/usertable')
