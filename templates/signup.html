@@ -30,7 +30,18 @@
 					<label for="password">Password</label>
 					<input type="password" name="password" class="form-control" id="password" placeholder="Enter password">
 				</div>
-				<input type="submit" class="btn btn-info" value="Continue"><br>
+
+				<div class="form-group">
+					<label for="confirmation">Confirm Password</label>
+					<input type="password" name="confirmation" class="form-control" id="confirmation" placeholder="Confirm password">
+				</div>
+
+				{% if error %}
+				<div>
+					<p class="text-danger"> {{error}} </p>
+				</div>
+				{% endif %}
+				<input type="submit" class="btn btn-info" value="Continue">
 			</div>
 		</form>
 	</div>

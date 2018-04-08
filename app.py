@@ -12,8 +12,8 @@ class User(Base):
 
 	id = Column('id', Integer,Sequence('user_id_seq'),primary_key=True)
 	name = Column('name',String(255))
-	email = Column('email',String(255),unique= True)
-	mobile = Column('mobile',String(15),unique=True)
+	email = Column('email',String(255))
+	mobile = Column('mobile',String(15))
 	password = Column('password',String(25))
 
 	def __repr__(self):
@@ -26,33 +26,64 @@ Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 sqlsession = Session()
 
-@app.route('/', methods=['POST','GET'])
-def index(name=None,log=False):
+@app.route('/')
+@app.route('/<name>')
+def index(name=None):
 	return render_template("homepage.html")
 
 @app.route('/login', methods=['POST','GET'])
 def login():
 	if request.method=='POST':
-		if request.form['password']=='password' and request.form['email']=='abc@abc.com':
-			return index()
+		password=str(request.form['password'])
+		email=str(request.form['email'])
+		user = sqlsession.query(User).filter_by(email=email).first()
+		if email=='' or password=='':
+			return render_template("login.html",error="Fields can't be empty")
+		if user is None:
+			return render_template("login.html",error="Email does not exist!")
+		elif user.password==password:
+			sqlsession.add(user)
+			sqlsession.commit()
+			session['user']=user.name
+			return redirect(url_for('index',name=user.name))
 		else:
-			flash('wrong password!')
-			return render_template("login.html")
-	return render_template('login.html')
+			return render_template("login.html",error="Wrong Password!")
+	return render_template('login.html',error=None)
 
 @app.route('/signup', methods=['POST','GET'])
 def signup():
 	if request.method=='POST':
+		error=None
 		user = User()
 		user.email=str(request.form['email'])
 		user.name=str(request.form['name'])
 		user.mobile=str(request.form['tel'])
 		user.password=str(request.form['password'])
+		confirm=str(request.form['confirmation'])
+
+		if user.email=='' or user.name=='' or user.mobile=='' or user.password=='':
+			error="Field can't be empty"
+
+		elif len(user.password)<8:
+			error="Password should be more than 8 characters"
+
+		elif confirm!=user.password:
+			error="Passwords do not match"
+
+		elif sqlsession.query(User).filter_by(email=user.email).first() is not None:
+			error="Email exists"
+
+		elif sqlsession.query(User).filter_by(mobile=user.mobile).first() is not None:
+			error="Mobile number exists"
+
+		if error:
+			return render_template('signup.html',error=error)
+
 		sqlsession.add(user)
 		sqlsession.commit()
 		session['user']=user.name
-		return index()
-	return render_template('signup.html')
+		return redirect(url_for('index',name=user.name))
+	return render_template('signup.html',error=None)
 
 @app.route('/usertable')
 def usertable():
