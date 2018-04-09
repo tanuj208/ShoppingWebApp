@@ -63,7 +63,7 @@ def login():
 		elif hashing.check_value(user.password,password,salt='abcd'):
 			sqlsession.add(user)
 			sqlsession.commit()
-			session['user']=user.name
+			session['user']=user.username
 			return redirect(url_for('index',name=user.name))
 		elif not hashing.check_value(user.password,password,salt='abcd'):
 			return render_template("login.html",error="Wrong Password!")
@@ -132,11 +132,12 @@ def sell():
 			return render_template('sell.html',error=error)
 		# seller_form_filled is not working
 		# maybe inheritance is not working
-		seller.seller_form_filled=True
+		update(User).values(seller_form_filled=True).where(User.username==session['user'])
 		sqlsession.add(seller)
 		sqlsession.commit()
 		return redirect(url_for('index',username=None))
 	flag=sqlsession.query(User).filter_by(username=session['user']).first().seller_form_filled
+	return render_template('test.html',data1=flag,data2='abcd'	)
 	if flag:
 		return redirect(url_for('index',username=session['user']))
 	else:

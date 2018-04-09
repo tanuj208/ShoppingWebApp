@@ -8,14 +8,20 @@
 <legend>Seller Details</legend>
 	<table border = 1 cellspacing=5 width=50% height=50px bgcolor="#ffff9f">
 	<tr>
-		<th>ID</td>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Mobile</th>
 		<th>Businessname</th>
-		<th>Address</td>
+		<th>Address</th>
 	</tr>
 
 	{% for row in rows if row["id"] %}
 	<tr>
 		<td>{{row["id"]}}</td>
+		<td>{{row["name"]}}</td>
+		<td>{{row["email"]}}</td>
+		<td>{{row["mobile"]}}</td>
 		<td>{{row["businessname"]}}</td>
 		<td>{{row["shopaddress"]}}</td>
 	</tr>
