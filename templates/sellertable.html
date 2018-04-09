@@ -5,27 +5,19 @@
 <body link="blue">
 
 <fieldset>
-<legend>User Details</legend>
+<legend>Seller Details</legend>
 	<table border = 1 cellspacing=5 width=50% height=50px bgcolor="#ffff9f">
 	<tr>
 		<th>ID</td>
-		<th>Username</th>
-		<th>Name</td>
-		<th>Email</td>
-		<th>Phone</td>
-		<th>Password</td>
-		<th>Seller Form Filled</th>
+		<th>Businessname</th>
+		<th>Address</td>
 	</tr>
 
 	{% for row in rows if row["id"] %}
 	<tr>
 		<td>{{row["id"]}}</td>
-		<td>{{row["username"]}}</td>
-		<td>{{row["name"]}}</td>
-		<td>{{row["email"]}}</td>
-		<td>{{row["mobile"]}}</td>
-		<td>{{row["password"]}}</td>
-		<td>{{row["seller_form_filled"]}}</td>
+		<td>{{row["businessname"]}}</td>
+		<td>{{row["shopaddress"]}}</td>
 	</tr>
 	{% else %}
 	<h1> No user found! :( </h1>

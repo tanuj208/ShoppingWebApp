@@ -12,8 +12,10 @@
 <body>
 	{% if 'user' in session %}
 	<p>Hello {{ session['user'] }}</p>
+	<p><a href="/logout">Logout</a></p>
+	<p><a href="/sell">Sell</a></p>
 	{% else %}
-	<a href="/login">Login and Signup</a>
+	<p><a href="/login">Login and Signup</a></p>
 	{% endif %}
 </body>
 </html>
