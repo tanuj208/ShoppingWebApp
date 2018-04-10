@@ -18,15 +18,15 @@ class User(Base):
 	email = Column('email',String(255))
 	mobile = Column('mobile',String(15))
 	password = Column('password',String(255))
-	seller_form_filled=Column('seller_form_filled',Integer)
+	isFormFilled=Column('isFormFilled',Integer)
 
 	def __repr__(self):
 		return "<User(username='%s' name='%s', email='%s', mobile='%s', password='%s')>" %(self.username,self.name,self.email,self.mobile,self.password) 
 
-class Seller(User):
+class Seller(Base):
 	__tablename__="seller"
-	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
-	username=Column(String(255),ForeignKey('user.username'))
+
+	id=Column('id',Integer,primary_key=True)
 	businessname=Column('businessname',String(255))
 	shopaddress=Column('shopaddress',String(255))
 
@@ -84,7 +84,7 @@ def signup():
 		user.name=str(request.form['name'])
 		user.mobile=str(request.form['tel'])
 		user.password=hashing.hash_value(str(request.form['password']),salt='abcd')
-		user.seller_form_filled=False
+		user.isFormFilled=0
 		confirm=hashing.hash_value(str(request.form['confirmation']),salt='abcd')
 
 		if user.username=='' or user.email=='' or user.name=='' or user.mobile=='' or hashing.check_value(user.password,'',salt='abcd'):
@@ -119,7 +119,8 @@ def sell():
 	if request.method=='POST':
 		error=None
 		seller=Seller()
-		seller.username=session['user']
+		user=sqlsession.query(User).filter_by(username=session['user']).first()
+		seller.id=user.id
 		seller.businessname=str(request.form['businessname'])
 		seller.shopaddress=str(request.form['shopaddress'])
 		if seller.shopaddress=='' or seller.businessname=='':
@@ -130,15 +131,15 @@ def sell():
 
 		if error:
 			return render_template('sell.html',error=error)
-		# seller_form_filled is not working
-		# maybe inheritance is not working
-		update(User).values(seller_form_filled=True).where(User.username==session['user'])
+		# isFormFilled is not working
+		# sqlsession.query().filter(User.username==session['user']).update({"isFormFilled":(1)})
+		user.isFormFilled=1
 		sqlsession.add(seller)
 		sqlsession.commit()
-		return redirect(url_for('index',username=None))
-	flag=sqlsession.query(User).filter_by(username=session['user']).first().seller_form_filled
-	return render_template('test.html',data1=flag,data2='abcd'	)
-	if flag:
+		return redirect(url_for('index',username=session['user']))
+	flag=sqlsession.query(User).filter_by(username=session['user']).first().isFormFilled
+	# return render_template('test.html',data1=flag,data2='abcd'	)
+	if flag==1:
 		return redirect(url_for('index',username=session['user']))
 	else:
 		return render_template('sell.html',error=None)
