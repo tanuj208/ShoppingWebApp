@@ -64,7 +64,7 @@ def login():
 			sqlsession.add(user)
 			sqlsession.commit()
 			session['user']=user.username
-			return redirect(url_for('index',name=user.name))
+			return redirect(url_for('index',name=user.username))
 		elif not hashing.check_value(user.password,password,salt='abcd'):
 			return render_template("login.html",error="Wrong Password!")
 	return render_template('login.html',error=None)
@@ -83,17 +83,29 @@ def signup():
 		user.email=str(request.form['email'])
 		user.name=str(request.form['name'])
 		user.mobile=str(request.form['tel'])
-		user.password=hashing.hash_value(str(request.form['password']),salt='abcd')
+		password=str(request.form['password'])
+		confirm=str(request.form['confirmation'])
 		user.isFormFilled=0
-		confirm=hashing.hash_value(str(request.form['confirmation']),salt='abcd')
 
-		if user.username=='' or user.email=='' or user.name=='' or user.mobile=='' or hashing.check_value(user.password,'',salt='abcd'):
+		if user.username=='' or user.email=='' or user.name=='' or user.mobile=='' or password=='' or confirm=='':
 			error="Field can't be empty"
 
-		elif len(user.password)<8:
+		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(password):
+			error="Password can't contain special charaters"
+
+		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.username):
+			error="Username can't contain special charaters"
+
+		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.name):
+			error="Name can't contain special charaters"
+
+		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.mobile):
+			error="Mobile can't contain special charaters"
+
+		elif len(password)<8:
 			error="Password should be more than 8 characters"
 
-		elif confirm!=user.password:
+		elif confirm!=password:
 			error="Passwords do not match"
 
 		elif sqlsession.query(User).filter_by(username=user.username).first() is not None:
@@ -108,6 +120,7 @@ def signup():
 		if error:
 			return render_template('signup.html',error=error)
 
+		user.password=hashing.hash_value(password)
 		sqlsession.add(user)
 		sqlsession.commit()
 		session['user']=user.username
@@ -131,14 +144,11 @@ def sell():
 
 		if error:
 			return render_template('sell.html',error=error)
-		# isFormFilled is not working
-		# sqlsession.query().filter(User.username==session['user']).update({"isFormFilled":(1)})
 		user.isFormFilled=1
 		sqlsession.add(seller)
 		sqlsession.commit()
 		return redirect(url_for('index',username=session['user']))
 	flag=sqlsession.query(User).filter_by(username=session['user']).first().isFormFilled
-	# return render_template('test.html',data1=flag,data2='abcd'	)
 	if flag==1:
 		return redirect(url_for('index',username=session['user']))
 	else:
