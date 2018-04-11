@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<h2 style = "text-align: center;">{{ message }}</h2>
+<body link="blue">
+
+<fieldset>
+<legend>Product Details</legend>
+	<table border = 1 cellspacing=5 width=50% height=50px bgcolor="#ffff9f">
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Price</th>
+		<th>Description</th>
+		<th>Quantity</th>
+		<th>Image name</th>
+		<th>Image</th>
+	</tr>
+
+	{% for row in rows if row["id"] %}
+	<tr>
+		<td>{{row["id"]}}</td>
+		<td>{{row["name"]}}</td>
+		<td>{{row["price"]}}</td>
+		<td>{{row["description"]}}</td>
+		<td>{{row["quantity"]}}</td>
+		<td>{{row["imageName"]}}</td>
+		<td>{{row["image"]}}</td>
+	</tr>
+	{% else %}
+	<h1> No user found! :( </h1>
+	{% endfor %}
+	</table>
+</fieldset>
+
+<br><a href = "/">Go back to home page</a>
+</body>
+
+</html>

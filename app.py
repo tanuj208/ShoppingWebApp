@@ -3,11 +3,16 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker,relationship
 from flask.ext.hashing import Hashing
+from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 import os
 
 app=Flask(__name__)
 Base = declarative_base()
 hashing=Hashing(app)
+photos=UploadSet('photos', IMAGES)
+
+app.config['UPLOADED_PHOTOS_DEST']='static/img'
+configure_uploads(app,photos)
 
 class User(Base):
 	__tablename__ = "user"
@@ -30,13 +35,19 @@ class Seller(Base):
 	businessname=Column('businessname',String(255))
 	shopaddress=Column('shopaddress',String(255))
 
-class Products(Base):
+class Product(Base):
 	__tablename__="products"
 
 	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
 	name=Column('name',String(255))
 	price=Column('price',String(255))
-	desciption=Column('desciption',String(1000))
+	description=Column('description',String(1000))
+	quantity=Column('quantity',Integer)
+	imageName=Column('imageName',String(255))
+	image=Column('image',LargeBinary)
+
+# class Category(Base):
+# 	__tablename__="category"
 
 engine=create_engine('sqlite:///user.db',echo=True)
 
@@ -120,7 +131,7 @@ def signup():
 		if error:
 			return render_template('signup.html',error=error)
 
-		user.password=hashing.hash_value(password)
+		user.password=hashing.hash_value(password,salt='abcd')
 		sqlsession.add(user)
 		sqlsession.commit()
 		session['user']=user.username
@@ -147,13 +158,38 @@ def sell():
 		user.isFormFilled=1
 		sqlsession.add(seller)
 		sqlsession.commit()
-		return redirect(url_for('index',username=session['user']))
+		return redirect(url_for('addProduct'))
 	flag=sqlsession.query(User).filter_by(username=session['user']).first().isFormFilled
 	if flag==1:
-		return redirect(url_for('index',username=session['user']))
+		return redirect(url_for('addProduct'))
 	else:
 		return render_template('sell.html',error=None)
 
+@app.route('/addProduct',methods=['GET','POST'])
+def addProduct():
+	if request.method=='POST':
+		error=None
+		product=Product()
+		product.name=str(request.form['itemName'])
+		product.description=str(request.form['itemDescription'])
+		product.quantity=str(request.form['quantity'])
+		img=request.files['image']
+		product.imageName=str(img.filename)
+		product.image=img.read()
+		if 'image' not in request.files:
+			error="Upload image first"
+	
+		elif product.name=='' or product.description=='' or product.quantity=='' or product.imageName=='':
+			error="Fields can't be empty"
+
+		if error:
+			return render_template('addProduct.html',error=error)
+		
+		sqlsession.add(product)
+		sqlsession.commit()
+		return redirect(url_for('index',username=session['user']))
+
+	return render_template('addProduct.html',error=None)
 
 @app.route('/usertable')
 def usertable():
@@ -164,6 +200,11 @@ def usertable():
 def sellertable():
 	sellers=sqlsession.query(Seller).all()
 	return render_template('sellertable.html',rows=sellers,message="SELLERS ::")
+
+@app.route('/productTable')
+def productTable():
+	products=sqlsession.query(Product).all()
+	return render_template('productTable.html',rows=products,message="PRODUCTS ::")
 
 if __name__=='__main__':
 	app.secret_key=os.urandom(12)

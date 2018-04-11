@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Add Product</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> 
+</head>
+<body>
+	<div class="mt-5 container">
+		<h1 class="text-center">Add products here</h1><br>
+		<form method="POST" enctype=multipart/form-data action="/addProduct">
+			<div class="jumbotron">
+				<div class="form-group">
+					<label for="itemName">Item Name</label>
+					<input type="text" name="itemName" class="form-control" id="itemName" placeholder="Enter item name">
+				</div>
+
+				<div class="form-group">
+					<label for="itemPrice">Item Price</label>
+					<input type="number" name="itemPrice" class="form-control" id="itemName" placeholder="Enter item price">
+				</div>
+
+				<div class="form-group">
+					<label for="itemDescription">Item Description</label>
+					<input type="text" name="itemDescription" class="form-control" id="itemDescription" placeholder="Enter item description">
+				</div>
+
+				<div class="form-group">
+					<label for="itemCategory">Item Category</label>
+					<input type="text" name="itemCategory" class="form-control" id="itemCategory" placeholder="Enter item category">
+				</div>
+
+				<div class="form-group">
+					<label for="quantity">Quantity</label>
+					<input type="text" name="quantity" class="form-control" id="quantity" placeholder="Enter quantity">
+				</div>
+
+				<div class="form-group">
+					<label for="image">Upload item image</label><br>
+					<input type="file" name="image" class="form-control" id="image">
+				</div>
+		
+				{% if error %}
+				<div>
+					<p class="text-danger"> {{error}} </p>
+				</div>
+				{% endif %}
+				<input type="submit" class="btn btn-info" value="Add product">
+			</div>
+		</form>
+	</div>
+</body>
+</html>
