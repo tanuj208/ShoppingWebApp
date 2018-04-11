@@ -56,6 +56,7 @@ Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 sqlsession = Session()
 
+
 @app.route('/')
 @app.route('/<username>')
 def index(username=None):
@@ -82,7 +83,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-	session.clear()
+	session.pop('user')
 	return redirect(url_for('index'))
 
 @app.route('/signup', methods=['POST','GET'])
@@ -171,6 +172,7 @@ def addProduct():
 		error=None
 		product=Product()
 		product.name=str(request.form['itemName'])
+		product.price=str(request.form['itemPrice'])
 		product.description=str(request.form['itemDescription'])
 		product.quantity=str(request.form['quantity'])
 		img=request.files['image']
