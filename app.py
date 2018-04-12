@@ -9,10 +9,10 @@ import os
 app=Flask(__name__)
 Base = declarative_base()
 hashing=Hashing(app)
-photos=UploadSet('photos', IMAGES)
+images=UploadSet('images', IMAGES)
 
-app.config['UPLOADED_PHOTOS_DEST']='static/img'
-configure_uploads(app,photos)
+app.config['UPLOADED_IMAGES_DEST']='static/img'
+configure_uploads(app,images)
 
 class User(Base):
 	__tablename__ = "user"
@@ -44,18 +44,11 @@ class Product(Base):
 	description=Column('description',String(1000))
 	quantity=Column('quantity',Integer)
 	imageName=Column('imageName',String(255))
-	image=Column('image',LargeBinary)
-
-# class Category(Base):
-# 	__tablename__="category"
 
 engine=create_engine('sqlite:///user.db',echo=True)
-
 Base.metadata.create_all(bind=engine)
-
 Session = sessionmaker(bind=engine)
 sqlsession = Session()
-
 
 @app.route('/')
 @app.route('/<username>')
@@ -175,13 +168,12 @@ def addProduct():
 		product.price=str(request.form['itemPrice'])
 		product.description=str(request.form['itemDescription'])
 		product.quantity=str(request.form['quantity'])
-		img=request.files['image']
-		product.imageName=str(img.filename)
-		product.image=img.read()
-		if 'image' not in request.files:
+		try:
+			product.imageName=images.save(request.files['image'])
+		except:
 			error="Upload image first"
 	
-		elif product.name=='' or product.description=='' or product.quantity=='' or product.imageName=='':
+		if product.name=='' or product.price=='' or product.description=='' or product.quantity=='':
 			error="Fields can't be empty"
 
 		if error:
