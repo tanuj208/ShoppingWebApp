@@ -44,6 +44,15 @@ class Product(Base):
 	description=Column('description',String(1000))
 	quantity=Column('quantity',Integer)
 	imageName=Column('imageName',String(255))
+	category_id=Column(Integer,ForeignKey('category.id'))
+
+class Category(Base):
+	__tablename__="category"
+
+	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
+	name=Column('name',String(255))
+
+	products=relationship('Product',backref='category',lazy='dynamic')
 
 engine=create_engine('sqlite:///user.db',echo=True)
 Base.metadata.create_all(bind=engine)
@@ -168,22 +177,26 @@ def addProduct():
 		product.price=str(request.form['itemPrice'])
 		product.description=str(request.form['itemDescription'])
 		product.quantity=str(request.form['quantity'])
+		categoryName=str(request.form['categoryName'])
 		try:
 			product.imageName=images.save(request.files['image'])
 		except:
 			error="Upload image first"
 	
-		if product.name=='' or product.price=='' or product.description=='' or product.quantity=='':
+		if product.name=='' or product.price=='' or product.description=='' or product.quantity=='' or categoryName=='':
 			error="Fields can't be empty"
 
 		if error:
 			return render_template('addProduct.html',error=error)
 		
+		category_id=sqlsession.query(Category).filter_by(name=categoryName).first().id
+		product.category_id=category_id
+
 		sqlsession.add(product)
 		sqlsession.commit()
 		return redirect(url_for('index',username=session['user']))
 
-	return render_template('addProduct.html',error=None)
+	return render_template('addProduct.html',error=None,categories=sqlsession.query(Category).all())
 
 @app.route('/usertable')
 def usertable():

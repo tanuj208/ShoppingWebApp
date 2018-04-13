@@ -26,13 +26,23 @@
 
 				<div class="form-group">
 					<label for="itemDescription">Item Description</label>
-					<input type="text" name="itemDescription" class="form-control" id="itemDescription" placeholder="Enter item description">
+					<textarea rows="3" column="10" name="itemDescription" class="form-control" id="itemDescription">Enter item description</textarea>
 				</div>
 
-				<div class="form-group">
-					<label for="itemCategory">Item Category</label>
-					<input type="text" name="itemCategory" class="form-control" id="itemCategory" placeholder="Enter item category">
-				</div>
+				<br>
+
+ 				<div class="dropdown">
+ 					<button type="button" class="btn btn-primary dropdown-toggle" name="categoryName" data-toggle="dropdown">
+ 						Add category
+ 					</button>
+ 					<div class="dropdown-menu">
+	 				{% for category in categories %}
+		 					<option class="dropdown-item" value="{{category.name}}">{{category.name}}</option>
+	 				{% endfor %}
+	 				</div>
+	 			</div>
+
+	 			<br>
 
 				<div class="form-group">
 					<label for="quantity">Quantity</label>
