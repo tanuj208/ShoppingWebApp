@@ -15,6 +15,7 @@
 		<th>Quantity</th>
 		<th>Image name</th>
 		<th>Image</th>
+		<th>Category_id</th>
 	</tr>
 
 	{% for row in rows if row["id"] %}
@@ -26,6 +27,7 @@
 		<td>{{row["quantity"]}}</td>
 		<td>{{row["imageName"]}}</td>
 		<td><img src="static/img/{{ row['imageName'] }}" style="width:100px;height:100px;" alt="NOO :("></td>
+		<td>{{row["category_id"]}}</td>
 	</tr>
 	{% else %}
 	<h1> No user found! :( </h1>

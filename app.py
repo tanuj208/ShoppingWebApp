@@ -44,14 +44,12 @@ class Product(Base):
 	description=Column('description',String(1000))
 	quantity=Column('quantity',Integer)
 	imageName=Column('imageName',String(255))
-	category_id=Column(Integer,ForeignKey('category.id'))
+	category_id=Column('category_id',Integer,ForeignKey('category.id'))
 
 class Category(Base):
 	__tablename__="category"
-
 	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
 	name=Column('name',String(255))
-
 	products=relationship('Product',backref='category',lazy='dynamic')
 
 engine=create_engine('sqlite:///user.db',echo=True)
@@ -103,34 +101,24 @@ def signup():
 
 		if user.username=='' or user.email=='' or user.name=='' or user.mobile=='' or password=='' or confirm=='':
 			error="Field can't be empty"
-
 		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(password):
 			error="Password can't contain special charaters"
-
 		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.username):
 			error="Username can't contain special charaters"
-
 		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.name):
 			error="Name can't contain special charaters"
-
 		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.mobile):
 			error="Mobile can't contain special charaters"
-
 		elif len(password)<8:
 			error="Password should be more than 8 characters"
-
 		elif confirm!=password:
 			error="Passwords do not match"
-
 		elif sqlsession.query(User).filter_by(username=user.username).first() is not None:
 			error="Username already exists"
-
 		elif sqlsession.query(User).filter_by(email=user.email).first() is not None:
 			error="Email already exists"
-
 		elif sqlsession.query(User).filter_by(mobile=user.mobile).first() is not None:
 			error="Mobile number already exists"
-
 		if error:
 			return render_template('signup.html',error=error)
 
@@ -150,14 +138,14 @@ def sell():
 		seller.id=user.id
 		seller.businessname=str(request.form['businessname'])
 		seller.shopaddress=str(request.form['shopaddress'])
+
 		if seller.shopaddress=='' or seller.businessname=='':
 			error="Field can't be empty"
-
 		elif sqlsession.query(Seller).filter_by(businessname=seller.businessname).first() is not None:
 			error="Businessname already exists"
-
 		if error:
 			return render_template('sell.html',error=error)
+
 		user.isFormFilled=1
 		sqlsession.add(seller)
 		sqlsession.commit()
@@ -178,19 +166,19 @@ def addProduct():
 		product.description=str(request.form['itemDescription'])
 		product.quantity=str(request.form['quantity'])
 		categoryName=str(request.form['categoryName'])
+
 		try:
 			product.imageName=images.save(request.files['image'])
 		except:
 			error="Upload image first"
-	
 		if product.name=='' or product.price=='' or product.description=='' or product.quantity=='' or categoryName=='':
 			error="Fields can't be empty"
-
 		if error:
-			return render_template('addProduct.html',error=error)
+			return render_template('addProduct.html',error=error,categories=sqlsession.query(Category).all())
 		
-		category_id=sqlsession.query(Category).filter_by(name=categoryName).first().id
-		product.category_id=category_id
+		# category=sqlsession.query(Category).filter_by(name=categoryName).first()
+		# product.category=category
+		# product.category_id=category_id
 
 		sqlsession.add(product)
 		sqlsession.commit()

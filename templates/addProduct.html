@@ -32,14 +32,13 @@
 				<br>
 
  				<div class="dropdown">
- 					<button type="button" class="btn btn-primary dropdown-toggle" name="categoryName" data-toggle="dropdown">
- 						Add category
- 					</button>
- 					<div class="dropdown-menu">
-	 				{% for category in categories %}
-		 					<option class="dropdown-item" value="{{category.name}}">{{category.name}}</option>
-	 				{% endfor %}
-	 				</div>
+ 					<select class="btn btn-primary dropdown-toggle" name="categoryName" data-toggle="dropdown">
+	 					<div class="dropdown-menu">
+		 				{% for category in categories %}
+			 					<option class="dropdown-item" value="{{category.name}}">{{category.name}}</option>
+		 				{% endfor %}
+		 				</div>
+		 			</select>
 	 			</div>
 
 	 			<br>
