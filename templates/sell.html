@@ -1,38 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title></title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> 
-</head>
-<body>
-	<div class="mt-5 container">
-		<h1 class="text-center">Please fill the following information first</h1><br>
-		<form action="/sell" method="POST">
-			<div class="jumbotron">
+	<head>
+		<meta charset="utf-8">
+		<title>Sell</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
+		<!-- bootstrap -->
+		<link href="{{url_for('static',filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">      
+		<link href="{{url_for('static',filename='bootstrap/css/bootstrap-responsive.min.css')}}" rel="stylesheet">
+		
+		<link href="{{url_for('static',filename='themes/css/bootstrappage.css')}}" rel="stylesheet"/>
+		
+		<!-- global styles -->
+		<link href="{{url_for('static',filename='themes/css/flexslider.css')}}" rel="stylesheet"/>
+		<link href="{{url_for('static',filename='themes/css/main.css')}}" rel="stylesheet"/>
 
-				<div class="form-group">
-					<label for="businessname">Choose your unique business name</label>
-					<input type="text" name="businessname" class="form-control" id="businessname" placeholder="Choose businessname">
-				</div>
+		<!-- scripts -->
+		<script src="{{url_for('static',filename='themes/js/jquery-1.7.2.min.js')}}"></script>
+		<script src="{{url_for('static',filename='bootstrap/js/bootstrap.min.js')}}"></script>				
+		<script src="{{url_for('static',filename='themes/js/superfish.js')}}"></script>	
+		<!--[if lt IE 9]>			
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
 
-				<div class="form-group">
-					<label for="shopaddress">Enter your shop address</label>
-					<input type="text" name="shopaddress" class="form-control" id="shopaddress" placeholder="Enter your shop address">
+	</head>
+    <body>		
+		<div id="top-bar" class="container">
+			<div class="row">
+				<div class="span4">
+					<form method="POST" class="search_form">
+						<input type="text" class="input-block-level search-query" Placeholder="eg. T-sirt">
+					</form>
 				</div>
-
-				{% if error %}
-				<div>
-					<p class="text-danger"> {{error}} </p>
+				<div class="span8">
+					<div class="account pull-right">
+						<ul class="user-menu">				
+							<li><a href="#">My Account</a></li>
+							<li><a href="cart.html">Your Cart</a></li>
+							<li><a href="checkout.html">Checkout</a></li>					
+							<li><a href="/logout">Logout</a></li>		
+						</ul>
+					</div>
 				</div>
-				{% endif %}
-				<input type="submit" class="btn btn-info" value="Continue">
 			</div>
-		</form>
-	</div>
-</body>
+		</div>
+		<div id="wrapper" class="container">
+			<section class="navbar main-menu">
+				<div class="navbar-inner main-menu">				
+					<a href="index.html" class="logo pull-left"><img src="{{url_for('static',filename='themes/images/logo.png')}}" class="site_logo" alt=""></a>
+					<nav id="menu" class="pull-right">
+						<ul>
+							<li><a href="./products.html">Women</a>					
+								<ul>
+									<li><a href="./products.html">Top wear</a></li>									
+									<li><a href="./products.html">Bottom wear</a></li>
+									<li><a href="./products.html">Foot wear</a></li>									
+									<li><a href="./products.html">Inner wear</a></li>									
+									<li><a href="./products.html">Watches</a></li>									
+									<li><a href="./products.html">Grooming</a></li>									
+									<li><a href="./products.html">Accessories</a></li>
+								</ul>
+							</li>
+							<li><a href="./products.html">Men</a>
+								<ul>
+									<li><a href="./products.html">Top wear</a></li>									
+									<li><a href="./products.html">Bottom wear</a></li>
+									<li><a href="./products.html">Foot wear</a></li>									
+									<li><a href="./products.html">Inner wear</a></li>									
+									<li><a href="./products.html">Watches</a></li>									
+									<li><a href="./products.html">Grooming</a></li>									
+									<li><a href="./products.html">Accessories</a></li>
+								</ul>
+							</li>
+							<li><a href="./products.html">Electronics</a>
+								<ul>
+									<li><a href="./products.html">Mobiles</a></li>									
+									<li><a href="./products.html">Laptops & PCs</a></li>
+									<li><a href="./products.html">Televisions</a></li>									
+									<li><a href="./products.html">Air Conditioners</a></li>
+									<li><a href="./products.html">Others</a></li>
+								</ul>
+							</li>
+							<li><a href="./products.html">Home & Furniture</a></li>
+							<li><a href="./products.html">Sports, Books & More</a>
+								<ul>									
+									<li><a href="./products.html">Gifts and Tech</a></li>
+									<li><a href="./products.html">Ties and Hats</a></li>
+									<li><a href="./products.html">Cold Weather</a></li>
+								</ul>
+							</li>							
+						</ul>
+					</nav>
+				</div>
+			</section>
+			<section class="header_text sub">
+			<img class="pageBanner" src="{{url_for('static',filename='themes/images/pageBanner.png')}}" alt="New products" >
+				<h4><span>Fill your info</span></h4>
+			</section>			
+			<section class="main-content">				
+				<div class="row">
+					<div class="span7">					
+						<h4 class="title"><span class="text"><strong>Sell</strong> Products</span></h4>
+					
+						<form action="/sell" method="POST" class="form-stacked">
+							<fieldset>
+								<div class="control-group">
+									<label class="control-label">Businessname</label>
+									<div class="controls">
+										<input type="text" name="businessname" placeholder="Choose your businessname" class="input-xlarge">
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label">Shop Address</label>
+									<div class="controls">
+										<input type="text" name="shopaddress" placeholder="Enter your shop address" class="input-xlarge">
+									</div>
+								</div>
+
+								{% if error %}
+								<div>
+									<p style="color:red;line-height:0.6;"> {{error}} </p>
+								</div>
+								{% endif %}
+
+								<hr>
+								<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Continue"></div>
+							</fieldset>
+						</form>					
+					</div>				
+				</div>
+			</section>
+
+			<section id="footer-bar">
+				<div class="row">
+					<div class="span3">
+						<h4>Navigation</h4>
+						<ul class="nav">
+							<li><a href="./index.html">Homepage</a></li>  
+							<li><a href="./about.html">About Us</a></li>
+							<li><a href="./contact.html">Contact Us</a></li>
+							<li><a href="./cart.html">Your Cart</a></li>
+							<li><a href="/logout">Logout</a></li>							
+						</ul>					
+					</div>
+					<div class="span4">
+						<h4>My Account</h4>
+						<ul class="nav">
+							<li><a href="#">My Account</a></li>
+							<li><a href="#">Order History</a></li>
+							<li><a href="#">Wish List</a></li>
+							<li><a href="#">Newsletter</a></li>
+						</ul>
+					</div>
+					<div class="span5">
+						<p class="logo"><img src="{{url_for('static',filename='themes/images/logo.png')}}" class="site_logo" alt=""></p>
+						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the  Lorem Ipsum has been the industry's standard dummy text ever since the you.</p>
+						<br/>
+						<span class="social_icons">
+							<a class="facebook" href="#">Facebook</a>
+							<a class="twitter" href="#">Twitter</a>
+							<a class="skype" href="#">Skype</a>
+							<a class="vimeo" href="#">Vimeo</a>
+						</span>
+					</div>					
+				</div>	
+			</section>
+			<section id="copyright">
+				<span>Copyright 2013 bootstrappage template  All right reserved.</span>
+			</section>
+		</div>
+		<script src="{{url_for('static',filename='themes/js/common.js')}}"></script>
+		<script>
+			$(document).ready(function() {
+				$('#checkout').click(function (e) {
+					document.location.href = "checkout.html";
+				})
+			});
+		</script>		
+    </body>
 </html>

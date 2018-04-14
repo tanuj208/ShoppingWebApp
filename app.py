@@ -60,7 +60,7 @@ sqlsession = Session()
 @app.route('/<username>')
 def index(username=None):
 	products=sqlsession.query(Product).all()
-	return render_template("index.html",products=products)
+	return render_template("index.html",products=products,size=len(products))
 
 @app.route('/login', methods=['POST','GET'])
 def login():

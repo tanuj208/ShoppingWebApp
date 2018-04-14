@@ -44,7 +44,7 @@
 							<li><a href="/logout">Logout</a></li>
 							<li><p>Hello {{ session['user'] }}</p></li>
 							{% else %}
-							<li><a href="/login">Login and Signup</a></li>
+							<li><a href="/login">Login</a></li>
 							{% endif %}
 						</ul>
 					</div>
@@ -136,19 +136,38 @@
 									<div class="carousel-inner">
 										<div class="active item">
 											<ul class="thumbnails">
-												{% for product in products %}								
+												{% for i in range(4) %}
 												<li class="span3">
 													<div class="product-box">
 														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="static/img/{{ product.imageName }}"" alt="NOO : (" /></a></p>
-														<a href="product_detail.html" class="title">{{product.name}}</a><br/>
-														<a href="products.html" class="category">{{ product.category.name }}</a>
-														<p class="price">{{ product.price }}</p>
+														<p><a href="product_detail.html"><img src="static/img/{{ products[i].imageName }}"" alt="NOO : (" /></a></p>
+														<a href="product_detail.html" class="title">{{products[i].name}}</a><br/>
+														<a href="products.html" class="category">{{ products[i].category.name }}</a>
+														<p class="price">{{ products[i].price }}</p>
 													</div>
 												</li>
 												{% endfor %}
 											</ul>
 										</div>
+										{% for j in range(4,size,4) %}
+										<div class="item">
+											<ul class="thumbnails">
+												{% for i in range(j,j+4) %}
+												{% if i<size %}
+												<li class="span3">
+													<div class="product-box">
+														<span class="sale_tag"></span>
+														<p><a href="product_detail.html"><img src="static/img/{{ products[i].imageName }}"" alt="NOO : (" /></a></p>
+														<a href="product_detail.html" class="title">{{products[i].name}}</a><br/>
+														<a href="products.html" class="category">{{ products[i].category.name }}</a>
+														<p class="price">{{ products[i].price }}</p>
+													</div>
+												</li>
+												{% endif %}
+												{% endfor %}
+											</ul>
+										</div>
+										{% endfor %}
 									</div>
 								</div>
 								<h4 class="title">
