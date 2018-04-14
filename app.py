@@ -25,9 +25,6 @@ class User(Base):
 	password = Column('password',String(255))
 	isFormFilled=Column('isFormFilled',Integer)
 
-	def __repr__(self):
-		return "<User(username='%s' name='%s', email='%s', mobile='%s', password='%s')>" %(self.username,self.name,self.email,self.mobile,self.password) 
-
 class Seller(Base):
 	__tablename__="seller"
 
@@ -62,7 +59,8 @@ sqlsession = Session()
 @app.route('/')
 @app.route('/<username>')
 def index(username=None):
-	return render_template("homepage.html")
+	products=sqlsession.query(Product).all()
+	return render_template("index.html",products=products)
 
 @app.route('/login', methods=['POST','GET'])
 def login():
@@ -71,17 +69,17 @@ def login():
 		username=str(request.form['username'])
 		user = sqlsession.query(User).filter_by(username=username).first()
 		if username=='' or hashing.check_value(password,'',salt='abcd'):
-			return render_template("login.html",error="Fields can't be empty")
+			return render_template("register.html",error1="Fields can't be empty",error2=None)
 		if user is None:
-			return render_template("login.html",error="Username does not exist!")
+			return render_template("register.html",error1="Username does not exist!",error2=None)
 		elif hashing.check_value(user.password,password,salt='abcd'):
 			sqlsession.add(user)
 			sqlsession.commit()
 			session['user']=user.username
 			return redirect(url_for('index',name=user.username))
 		elif not hashing.check_value(user.password,password,salt='abcd'):
-			return render_template("login.html",error="Wrong Password!")
-	return render_template('login.html',error=None)
+			return render_template("register.html",error1="Wrong Password!",error2=None)
+	return render_template('register.html',error1=None, error2=None)
 
 @app.route('/logout')
 def logout():
@@ -122,14 +120,14 @@ def signup():
 		elif sqlsession.query(User).filter_by(mobile=user.mobile).first() is not None:
 			error="Mobile number already exists"
 		if error:
-			return render_template('signup.html',error=error)
+			return render_template('register.html',error1=None, error2=error)
 
 		user.password=hashing.hash_value(password,salt='abcd')
 		sqlsession.add(user)
 		sqlsession.commit()
 		session['user']=user.username
 		return redirect(url_for('index',username=user.username))
-	return render_template('signup.html',error=None)
+	return render_template('register.html',error1=None, error2=None)
 
 @app.route('/sell', methods=['GET','POST'])
 def sell():

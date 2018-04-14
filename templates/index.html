@@ -59,23 +59,43 @@
 						<ul>
 							<li><a href="./products.html">Women</a>					
 								<ul>
-									<li><a href="./products.html">Lacinia nibh</a></li>									
-									<li><a href="./products.html">Eget molestie</a></li>
-									<li><a href="./products.html">Varius purus</a></li>									
+									<li><a href="./products.html">Top wear</a></li>									
+									<li><a href="./products.html">Bottom wear</a></li>
+									<li><a href="./products.html">Foot wear</a></li>									
+									<li><a href="./products.html">Inner wear</a></li>									
+									<li><a href="./products.html">Watches</a></li>									
+									<li><a href="./products.html">Grooming</a></li>									
+									<li><a href="./products.html">Accessories</a></li>
 								</ul>
-							</li>															
-							<li><a href="./products.html">Men</a></li>			
-							<li><a href="./products.html">Sport</a>
+							</li>
+							<li><a href="./products.html">Men</a>
+								<ul>
+									<li><a href="./products.html">Top wear</a></li>									
+									<li><a href="./products.html">Bottom wear</a></li>
+									<li><a href="./products.html">Foot wear</a></li>									
+									<li><a href="./products.html">Inner wear</a></li>									
+									<li><a href="./products.html">Watches</a></li>									
+									<li><a href="./products.html">Grooming</a></li>									
+									<li><a href="./products.html">Accessories</a></li>
+								</ul>
+							</li>
+							<li><a href="./products.html">Electronics</a>
+								<ul>
+									<li><a href="./products.html">Mobiles</a></li>									
+									<li><a href="./products.html">Laptops & PCs</a></li>
+									<li><a href="./products.html">Televisions</a></li>									
+									<li><a href="./products.html">Air Conditioners</a></li>
+									<li><a href="./products.html">Others</a></li>
+								</ul>
+							</li>
+							<li><a href="./products.html">Home & Furniture</a></li>
+							<li><a href="./products.html">Sports, Books & More</a>
 								<ul>									
 									<li><a href="./products.html">Gifts and Tech</a></li>
 									<li><a href="./products.html">Ties and Hats</a></li>
 									<li><a href="./products.html">Cold Weather</a></li>
 								</ul>
 							</li>							
-							<li><a href="./products.html">Baby & Kids</a></li>
-							<li><a href="./products.html">Khattar</a></li>
-							<li><a href="./products.html">Best Seller</a></li>
-							<li><a href="./products.html">Top Seller</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -107,6 +127,31 @@
 						<div class="row">
 							<div class="span12">
 								<h4 class="title">
+									<span class="pull-left"><span class="text"><span class="line">All <strong>Products</strong></span></span></span>
+									<span class="pull-right">
+										<a class="left button" href="#allProducts" data-slide="prev"></a><a class="right button" href="#allProducts" data-slide="next"></a>
+									</span>
+								</h4>
+								<div id="allProducts" class="myCarousel carousel slide">
+									<div class="carousel-inner">
+										<div class="active item">
+											<ul class="thumbnails">
+												{% for product in products %}								
+												<li class="span3">
+													<div class="product-box">
+														<span class="sale_tag"></span>
+														<p><a href="product_detail.html"><img src="static/img/{{ product.imageName }}"" alt="NOO : (" /></a></p>
+														<a href="product_detail.html" class="title">{{product.name}}</a><br/>
+														<a href="products.html" class="category">{{ product.category.name }}</a>
+														<p class="price">{{ product.price }}</p>
+													</div>
+												</li>
+												{% endfor %}
+											</ul>
+										</div>
+									</div>
+								</div>
+								<h4 class="title">
 									<span class="pull-left"><span class="text"><span class="line">Feature <strong>Products</strong></span></span></span>
 									<span class="pull-right">
 										<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
@@ -115,20 +160,11 @@
 								<div id="myCarousel" class="myCarousel carousel slide">
 									<div class="carousel-inner">
 										<div class="active item">
-											<ul class="thumbnails">												
+											<ul class="thumbnails">	
 												<li class="span3">
 													<div class="product-box">
 														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="themes/images/ladies/1.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
-														<a href="products.html" class="category">Commodo consequat</a>
-														<p class="price">$17.25</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="themes/images/ladies/2.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/ladies/2.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Quis nostrud exerci tation</a><br/>
 														<a href="products.html" class="category">Quis nostrud</a>
 														<p class="price">$32.50</p>
@@ -136,7 +172,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/ladies/3.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/ladies/3.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Know exactly turned</a><br/>
 														<a href="products.html" class="category">Quis nostrud</a>
 														<p class="price">$14.20</p>
@@ -144,7 +180,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/ladies/4.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/ladies/4.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">You think fast</a><br/>
 														<a href="products.html" class="category">World once</a>
 														<p class="price">$31.45</p>
@@ -156,7 +192,7 @@
 											<ul class="thumbnails">
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/ladies/5.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/ladies/5.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Know exactly</a><br/>
 														<a href="products.html" class="category">Quis nostrud</a>
 														<p class="price">$22.30</p>
@@ -164,7 +200,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/ladies/6.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/ladies/6.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
 														<a href="products.html" class="category">Commodo consequat</a>
 														<p class="price">$40.25</p>
@@ -172,7 +208,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/ladies/7.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/ladies/7.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">You think water</a><br/>
 														<a href="products.html" class="category">World once</a>
 														<p class="price">$10.45</p>
@@ -180,17 +216,18 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/ladies/8.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/ladies/8.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Quis nostrud exerci</a><br/>
 														<a href="products.html" class="category">Quis nostrud</a>
 														<p class="price">$35.50</p>
 													</div>
-												</li>																																	
+												</li>
+
 											</ul>
 										</div>
-									</div>							
+									</div>
 								</div>
-							</div>						
+							</div>
 						</div>
 						<br/>
 						<div class="row">
@@ -208,7 +245,7 @@
 												<li class="span3">
 													<div class="product-box">
 														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="themes/images/cloth/bootstrap-women-ware2.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/cloth/bootstrap-women-ware2.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
 														<a href="products.html" class="category">Commodo consequat</a>
 														<p class="price">$25.50</p>
@@ -216,7 +253,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cloth/bootstrap-women-ware1.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/cloth/bootstrap-women-ware1.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Quis nostrud exerci tation</a><br/>
 														<a href="products.html" class="category">Quis nostrud</a>
 														<p class="price">$17.55</p>
@@ -224,7 +261,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cloth/bootstrap-women-ware6.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/cloth/bootstrap-women-ware6.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Know exactly turned</a><br/>
 														<a href="products.html" class="category">Quis nostrud</a>
 														<p class="price">$25.30</p>
@@ -232,7 +269,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cloth/bootstrap-women-ware5.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/cloth/bootstrap-women-ware5.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">You think fast</a><br/>
 														<a href="products.html" class="category">World once</a>
 														<p class="price">$25.60</p>
@@ -244,7 +281,7 @@
 											<ul class="thumbnails">
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cloth/bootstrap-women-ware4.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/cloth/bootstrap-women-ware4.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Know exactly</a><br/>
 														<a href="products.html" class="category">Quis nostrud</a>
 														<p class="price">$45.50</p>
@@ -252,7 +289,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cloth/bootstrap-women-ware3.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/cloth/bootstrap-women-ware3.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
 														<a href="products.html" class="category">Commodo consequat</a>
 														<p class="price">$33.50</p>
@@ -260,7 +297,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cloth/bootstrap-women-ware2.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/cloth/bootstrap-women-ware2.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">You think water</a><br/>
 														<a href="products.html" class="category">World once</a>
 														<p class="price">$45.30</p>
@@ -268,7 +305,7 @@
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cloth/bootstrap-women-ware1.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="{{url_for('static',filename='themes/images/cloth/bootstrap-women-ware1.jpg')}}" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Quis nostrud exerci</a><br/>
 														<a href="products.html" class="category">Quis nostrud</a>
 														<p class="price">$25.20</p>

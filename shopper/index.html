@@ -39,8 +39,16 @@
 						<ul class="user-menu">				
 							<li><a href="#">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
-							<li><a href="checkout.html">Checkout</a></li>					
-							<li><a href="register.html">Login</a></li>		
+							<li><a href="checkout.html">Checkout</a></li>
+							<!-- editing start -->
+							{% if 'user' in session %}
+							<li><a href="/sell">Sell</a></li>
+							<li><a href="/logout">Logout</a></li>					
+							<li><p>Hello {{ session['user'] }}</p></li>
+							{% else %}
+							<li><a href="register.html">Login and Signup</a></li>
+							{% endif %}
+							<!-- editing end -->
 						</ul>
 					</div>
 				</div>
