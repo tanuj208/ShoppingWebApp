@@ -185,6 +185,12 @@ def addProduct():
 		return redirect(url_for('index',username=session['user']))
 	return render_template('addProduct.html',error=None,categories=sqlsession.query(Category).all())
 
+@app.route('/product_detail')
+@app.route('/product_detail/<productid>')
+def product_detail(productid=None):
+	product=sqlsession.query(Product).filter_by(id=productid).first()
+	return render_template('product_detail.html',product=product)
+
 @app.route('/usertable')
 def usertable():
 	users = sqlsession.query(User).all()
