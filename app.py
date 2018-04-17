@@ -24,6 +24,7 @@ class User(Base):
 	mobile = Column('mobile',String(15))
 	password = Column('password',String(255))
 	isFormFilled=Column('isFormFilled',Integer)
+	orders=relationship('Order',backref='user')
 
 class Seller(Base):
 	__tablename__="seller"
@@ -50,11 +51,23 @@ class Category(Base):
 	name = Column('name',String(255))
 	products=relationship('Product',backref='category')
 
+
+# sold_products = Table('sold-products',
+#                          Column('order_id', Integer, ForeignKey('order.id')),
+#                          Column('product_id', Integer, ForeignKey('product.id'))
+#                          )
+
+class Order(Base):
+	__tablename__="order"
+
+	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
+	user_id=Column('user_id',Integer,ForeignKey('user.id'))
+	# products=relationship('Product',backref='category')
+
 engine=create_engine('sqlite:///user.db',echo=True)
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 sqlsession = Session()
-
 
 @app.route('/')
 @app.route('/<username>')

@@ -85,8 +85,7 @@
 			</section>
 
 			<section class="header_text sub">
-			<img class="pageBanner" src="{{url_for('static',filename='themes/images/pageBanner.png')}}" alt="New products" >
-				<h4><span>Product Detail</span></h4>
+			<!-- <img class="pageBanner" src="{{url_for('static',filename='themes/images/site-ss15-page-banner-feb-15-final.jpg')}}" alt="New products" > -->
 			</section>
 
 			<section class="main-content">				
@@ -95,36 +94,27 @@
 						<div class="row">
 							<div class="span4">
 
-								<a href="{{url_for('static',filename='themes/images/ladies/1.jpg')}}" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="{{ product.imageName }}" src="{{url_for('static',filename='img/'+product.imageName)}}"></a>
+								<a href="{{url_for('static',filename='img/'+product.imageName)}}" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="{{ product.imageName }}" src="{{url_for('static',filename='img/'+product.imageName)}}"></a>
 
-								<ul class="thumbnails small">								
-									<li class="span1">
-										<a href="{{url_for('static',filename='themes/images/ladies/2.jpg')}}" class="thumbnail" data-fancybox-group="group1" title="Description 2"><img src="themes/images/ladies/2.jpg" alt=""></a>
-									</li>								
-									<li class="span1">
-										<a href="themes/images/ladies/3.jpg" class="thumbnail" data-fancybox-group="group1" title="Description 3"><img src="themes/images/ladies/3.jpg" alt=""></a>
-									</li>													
-									<li class="span1">
-										<a href="themes/images/ladies/4.jpg" class="thumbnail" data-fancybox-group="group1" title="Description 4"><img src="themes/images/ladies/4.jpg" alt=""></a>
-									</li>
-									<li class="span1">
-										<a href="themes/images/ladies/5.jpg" class="thumbnail" data-fancybox-group="group1" title="Description 5"><img src="themes/images/ladies/5.jpg" alt=""></a>
-									</li>
-								</ul>
 							</div>
 							<div class="span5">
+								<h4><span>PRODUCT DETAILS</span></h4>
 								<address>
-									<strong>Brand:</strong> <span>{{ product.name }}</span><br>
+									<strong>Name:</strong> <span>{{ product.name }}</span><br>
 									<strong>Product Code:</strong> <span>Product {{ product.id }}</span><br>
-									<strong>Reward Points:</strong> <span>0</span><br>
-									<strong>Availability:</strong> <span>Out Of Stock</span><br>								
+									<strong>Rating:</strong> <span>0</span><br>
+									{% if product.quantity == 0 %}
+									<strong>Availability:</strong> <span>Out Of Stock</span><br>
+									{% else %}
+									<strong>Availability:</strong> <span>Few Pieces left</span><br>
+									{% endif %}
 								</address>									
-								<h4><strong>Price: Rs.{{ product.price}}</strong></h4>
+								<h4><strong>Price: ₹{{ product.price}}</strong></h4>
 							</div>
 							<div class="span5">
 								<form class="form-inline">
 									<label class="checkbox">
-										<input type="checkbox" value=""> Option one is this and that
+										<input type="checkbox" value=""> Complimentary Gift Wrapping
 									</label>
 									<br/>
 									<label class="checkbox">
@@ -132,11 +122,12 @@
 									</label>
 									<p>&nbsp;</p>
 									<label>Qty:</label>
-									<input type="text" class="span1" placeholder="1">
+									<input type="number" class="span1" placeholder="1">
 									<button class="btn btn-inverse" type="submit">Add to cart</button>
 								</form>
 							</div>							
 						</div>
+						<br>
 						<div class="row">
 							<div class="span9">
 								<ul class="nav nav-tabs" id="myTab">
@@ -144,7 +135,7 @@
 									<li class=""><a href="#profile">Additional Information</a></li>
 								</ul>							 
 								<div class="tab-content">
-									<div class="tab-pane active" id="home">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</div>
+									<div class="tab-pane active" id="home">{{product.description}}<br>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</div>
 									<div class="tab-pane" id="profile">
 										<table class="table table-striped shop_attributes">	
 											<tbody>
