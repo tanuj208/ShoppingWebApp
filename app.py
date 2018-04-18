@@ -29,9 +29,11 @@ class User(Base):
 class Seller(Base):
 	__tablename__="seller"
 
+	# seller.id is same as user.id
 	id=Column('id',Integer,primary_key=True)
 	businessname=Column('businessname',String(255))
 	shopaddress=Column('shopaddress',String(255))
+	products=relationship('Product',backref='seller')
 
 class Product(Base):
 	__tablename__="product"
@@ -43,6 +45,8 @@ class Product(Base):
 	quantity=Column('quantity',Integer)
 	imageName=Column('imageName',String(255))
 	category_id=Column('category_id',Integer,ForeignKey('category.id'))
+	seller_id=Column('seller_id',Integer,ForeignKey('seller.id'))
+	orders=relationship('Order',backref='product')
 
 class Category(Base):
 	__tablename__="category"
@@ -51,18 +55,22 @@ class Category(Base):
 	name = Column('name',String(255))
 	products=relationship('Product',backref='category')
 
-
-# sold_products = Table('sold-products',
-#                          Column('order_id', Integer, ForeignKey('order.id')),
-#                          Column('product_id', Integer, ForeignKey('product.id'))
-#                          )
-
 class Order(Base):
 	__tablename__="order"
 
 	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
 	user_id=Column('user_id',Integer,ForeignKey('user.id'))
+	product_id = Column('product_id',Integer,ForeignKey('product.id'))
+	product_quantity = Column('product_quantity',Integer)
+	date = Column('date',DateTime)
+	isOrdered = Column('isOrdered',Integer)
+	# one means ordered otherwise in cart
 	# products=relationship('Product',backref='category')
+
+# order_products= Table('order_products',
+# 						Column('order_id',Integer,ForeignKey('order.id'))
+# 						Column('product_id',Integer,ForeignKey('product.id'))
+# 						)
 
 engine=create_engine('sqlite:///user.db',echo=True)
 Base.metadata.create_all(bind=engine)
@@ -180,6 +188,8 @@ def addProduct():
 		product.description=str(request.form['itemDescription'])
 		product.quantity=str(request.form['quantity'])
 		categoryName=str(request.form['categoryName'])
+		user=sqlsession.query(User).filter_by(username=session['user']).first()
+		seller=sqlsession.query(Seller).filter_by(id=user.id).first()
 
 		try:
 			product.imageName=images.save(request.files['image'])
@@ -192,22 +202,73 @@ def addProduct():
 		
 		category=sqlsession.query(Category).filter_by(name=categoryName).first()
 		product.category=category
+		product.seller=seller
 
 		sqlsession.add(product)
 		sqlsession.commit()
 		return redirect(url_for('index',username=session['user']))
 	return render_template('addProduct.html',error=None,categories=sqlsession.query(Category).all())
 
-@app.route('/product_detail')
-@app.route('/product_detail/<productid>')
+@app.route('/product_detail',methods=['POST','GET'])
+@app.route('/product_detail/<productid>',methods=['POST','GET'])
 def product_detail(productid=None):
+	if request.method == 'POST':
+		order=Order()
+		product_id = request.form['product_id']
+		product = sqlsession.query(Product).filter_by(id=product_id).first()
+		user = sqlsession.query(User).filter_by(username=session['user']).first()
+		order.user = user
+		order.product = product
+		order.product_quantity = request.form['product_quantity']
+		order.isOrdered = 0
+		stock = product.quantity
+		if stock == 0:
+			error = "Product is out of stock"
+		elif stock < order.product_quantity:
+			error = "Only " + str(stock) +" pieces are left"
+		return render_template('product_detail.html',product=product)
 	product=sqlsession.query(Product).filter_by(id=productid).first()
 	return render_template('product_detail.html',product=product)
 
+@app.route('/category')
+@app.route('/category/<category_id>')
+@app.route('/category/<category_id>/<page_number>')
+def category_filter(category_id=None,page_number=None):
+	products=sqlsession.query(Product).filter_by(category_id=category_id).all()
+	if page_number == None:
+		page_number = 1
+		startIndex = 0
+	else:
+		startIndex=(page_number-1)*9-1;
+	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
+
+# @app.route('/cart')
+# @app.route('/cart/<username>')
+# def cart(username=None, methods=['POST','GET']):
+# 	if request.method == 'POST':
+# 		order=Order()
+# 		product_id = request.form['product_id']
+# 		product = sqlsession.query(Product).filter_by(id=product_id).first()
+# 		user = sqlsession.query(User).filter_by(username=session['user']).first()
+# 		order.user = user
+# 		order.product = product
+# 		order.product_quantity = request.form['product_quantity']
+# 		order.isOrdered = 0
+# 		stock = product.quantity
+# 		if stock == 0:
+# 			error = "Product is out of stock"
+# 		elif stock < order.product_quantity:
+# 			error = "Only " + str(stock) +" pieces are left"
+# 		return render_template('product_detail.html',product=product)
+# 	# return render_template('product_detail.html',product=product)
+# 	# user = sqlsession.query(User).filter_by(username=session['user']).first()
+# 	# cartDetails = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0).all()
+# 	# return render_template('cart.html',cartDetails=cartDetails,totalPrice=0,error=None)
+
 @app.route('/usertable')
 def usertable():
-	users = sqlsession.query(User).all()
-	return render_template('table.html',rows=users,message="USERS ::")
+	user = sqlsession.query(User).all()
+	return render_template('table.html',rows=user,message="USERS ::")
 
 @app.route('/sellertable')
 def sellertable():
@@ -218,6 +279,11 @@ def sellertable():
 def productTable():
 	products=sqlsession.query(Product).all()
 	return render_template('productTable.html',rows=products,message="PRODUCTS ::")
+
+@app.route('/orderTable')
+def orderTable():
+	orders=sqlsession.query(Order).all()
+	return render_template('orderTable.html',rows=orders,message="ORDERS ::")
 
 if __name__=='__main__':
 	app.secret_key=os.urandom(12)

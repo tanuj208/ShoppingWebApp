@@ -40,7 +40,7 @@
 					<div class="account pull-right">
 						<ul class="user-menu">				
 							<li><a href="#">My Account</a></li>
-							<li><a href="cart.html">Your Cart</a></li>
+							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="checkout.html">Checkout</a></li>
 							{% if 'user' in session %}
 							<li><a href="/sell">Sell</a></li>
@@ -106,14 +106,14 @@
 									{% if product.quantity == 0 %}
 									<strong>Availability:</strong> <span>Out Of Stock</span><br>
 									{% else %}
-									<strong>Availability:</strong> <span>Few Pieces left</span><br>
+									<strong>Availability:</strong> <span>{{product.quantity}} Pieces left</span><br>
 									{% endif %}
 								</address>									
 								<h4><strong>Price: ₹{{ product.price}}</strong></h4>
 							</div>
 							<div class="span5">
-								<form class="form-inline">
-									<label class="checkbox">
+								<form action="/product_detail/{{ product.id }}" method="POST" class="form-inline">
+<!-- 									<label class="checkbox">
 										<input type="checkbox" value=""> Complimentary Gift Wrapping
 									</label>
 									<br/>
@@ -121,9 +121,10 @@
 									  <input type="checkbox" value=""> Be sure to include why it's great
 									</label>
 									<p>&nbsp;</p>
+ -->								<input type="hidden" name="product_id" id="product_id" value="{{ product.id }}">
 									<label>Qty:</label>
-									<input type="number" class="span1" placeholder="1">
-									<button class="btn btn-inverse" type="submit">Add to cart</button>
+									<input type="number" name= "product_quantity" class="span1" placeholder="1">
+									<input class="btn btn-inverse" type="submit" value="Add to cart">
 								</form>
 							</div>							
 						</div>
@@ -319,7 +320,7 @@
 							<li><a href="./index.html">Homepage</a></li>  
 							<li><a href="./about.html">About Us</a></li>
 							<li><a href="./contact.html">Contac Us</a></li>
-							<li><a href="./cart.html">Your Cart</a></li>
+							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="./register.html">Login</a></li>							
 						</ul>					
 					</div>

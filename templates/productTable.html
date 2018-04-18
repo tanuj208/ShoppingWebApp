@@ -16,6 +16,7 @@
 		<th>Image name</th>
 		<th>Image</th>
 		<th>Category_id</th>
+		<th>Seller_id</th>
 	</tr>
 
 	{% for row in rows if row["id"] %}
@@ -28,6 +29,7 @@
 		<td>{{row["imageName"]}}</td>
 		<td><img src="static/img/{{ row['imageName'] }}" style="width:100px;height:100px;" alt="NOO :("></td>
 		<td>{{row["category_id"]}}</td>
+		<td>{{row["seller_id"]}}</td>
 	</tr>
 	{% else %}
 	<h1> No user found! :( </h1>

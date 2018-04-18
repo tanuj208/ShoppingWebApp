@@ -7,19 +7,19 @@
 		<meta name="description" content="">
 		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
 		<!-- bootstrap -->
-		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">      
-		<link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">		
-		<link href="themes/css/bootstrappage.css" rel="stylesheet"/>
+		<link href="{{url_for('static',filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">      
+		<link href="{{url_for('static',filename='bootstrap/css/bootstrap-responsive.min.css')}}" rel="stylesheet">		
+		<link href="{{url_for('static',filename='themes/css/bootstrappage.css')}}" rel="stylesheet"/>
 		
 		<!-- global styles -->
-		<link href="themes/css/flexslider.css" rel="stylesheet"/>
-		<link href="themes/css/main.css" rel="stylesheet"/>
+		<link href="{{url_for('static',filename='themes/css/flexslider.css')}}" rel="stylesheet"/>
+		<link href="{{url_for('static',filename='themes/css/main.css')}}" rel="stylesheet"/>
 
 		<!-- scripts -->
-		<script src="themes/js/jquery-1.7.2.min.js"></script>
-		<script src="bootstrap/js/bootstrap.min.js"></script>				
-		<script src="themes/js/superfish.js"></script>	
-		<script src="themes/js/jquery.scrolltotop.js"></script>
+		<script src="{{url_for('static',filename='themes/js/jquery-1.7.2.min.js')}}"></script>
+		<script src="{{url_for('static',filename='bootstrap/js/bootstrap.min.js')}}"></script>				
+		<script src="{{url_for('static',filename='themes/js/superfish.js')}}"></script>	
+		<script src="{{url_for('static',filename='themes/js/jquery.scrolltotop.js')}}"></script>
 		<!--[if lt IE 9]>			
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 			<script src="themes/js/respond.min.js"></script>
@@ -33,48 +33,85 @@
 						<input type="text" class="input-block-level search-query" Placeholder="eg. T-sirt">
 					</form>
 				</div>
+
 				<div class="span8">
 					<div class="account pull-right">
-						<ul class="user-menu">				
-							<li><a href="#">My Account</a></li>
-							<li><a href="cart.html">Your Cart</a></li>
-							<li><a href="checkout.html">Checkout</a></li>					
-							<li><a href="register.html">Login</a></li>			
+						<ul class="user-menu">	
+							<li><a href="/account">My Account</a></li>
+							<li><a href="/cart">Your Cart</a></li>
+							<li><a href="/checkout">Checkout</a></li>
+							{% if 'user' in session %}
+							<li><a href="/sell">Sell</a></li>
+							<li><a href="/logout">Logout</a></li>
+							<li><p>Hello {{ session['user'] }}</p></li>
+							{% else %}
+							<li><a href="/login">Login</a></li>
+							{% endif %}
 						</ul>
 					</div>
 				</div>
+
 			</div>
 		</div>
+
 		<div id="wrapper" class="container">
 			<section class="navbar main-menu">
 				<div class="navbar-inner main-menu">				
-					<a href="index.html" class="logo pull-left"><img src="themes/images/logo.png" class="site_logo" alt=""></a>
+					<a href="index.html" class="logo pull-left"><img src="{{url_for('static',filename='themes/images/Volusion-Master-Logo.png')}}" class="site_logo" alt=""></a>
+
 					<nav id="menu" class="pull-right">
 						<ul>
-							<li><a href="./products.html">Woman</a>					
+							<li><a>Women</a>					
 								<ul>
-									<li><a href="./products.html">Lacinia nibh</a></li>									
-									<li><a href="./products.html">Eget molestie</a></li>
-									<li><a href="./products.html">Varius purus</a></li>									
+									<li><a href="/category/1">Top wear</a></li>									
+									<li><a href="/category/2">Bottom wear</a></li>
+									<li><a href="/category/3">Foot wear</a></li>									
+									<li><a href="/category/4">Inner wear</a></li>									
+									<li><a href="/category/5">Watches</a></li>									
+									<li><a href="/category/6">Accessories</a></li>
 								</ul>
-							</li>															
-							<li><a href="./products.html">Man</a></li>			
-							<li><a href="./products.html">Sport</a>
+							</li>
+							<li><a>Men</a>
+								<ul>
+									<li><a href="/category/7">Top wear</a></li>									
+									<li><a href="/category/8">Bottom wear</a></li>
+									<li><a href="/category/9">Foot wear</a></li>									
+									<li><a href="/category/10">Watches</a></li>									
+									<li><a href="/category/11">Grooming</a></li>									
+									<li><a href="/category/12">Accessories</a></li>
+								</ul>
+							</li>
+							<li><a>Electronics</a>
+								<ul>
+									<li><a href="/category/13">Mobiles</a></li>									
+									<li><a href="/category/14">Laptops & PCs</a></li>
+									<li><a href="/category/15">Televisions</a></li>									
+									<li><a href="/category/16">Air Conditioners</a></li>
+									<li><a href="/category/17">Others</a></li>
+								</ul>
+							</li>
+							<li><a>Home & Furniture</a>
+								<ul>
+									<li><a href="/category/18">Kitchen</a></li>									
+									<li><a href="/category/19">Furniture</a></li>
+									<li><a href="/category/20">Decor</a></li>									
+									<li><a href="/category/21">Others</a></li>
+								</ul>
+							</li>
+							<li><a>Sports, Books & More</a>
 								<ul>									
-									<li><a href="./products.html">Gifts and Tech</a></li>
-									<li><a href="./products.html">Ties and Hats</a></li>
-									<li><a href="./products.html">Cold Weather</a></li>
+									<li><a href="category/22">Sports</a></li>
+									<li><a href="category/23">Books</a></li>
+									<li><a href="category/24">Others</a></li>
 								</ul>
-							</li>							
-							<li><a href="./products.html">Hangbag</a></li>
-							<li><a href="./products.html">Best Seller</a></li>
-							<li><a href="./products.html">Top Seller</a></li>
+							</li>
 						</ul>
 					</nav>
 				</div>
-			</section>				
+			</section>
+
 			<section class="header_text sub">
-			<img class="pageBanner" src="themes/images/pageBanner.png" alt="New products" >
+			<img class="pageBanner" src="{{url_for('static',filename='themes/images/pageBanner.png')}}" alt="New products" >
 				<h4><span>Shopping Cart</span></h4>
 			</section>
 			<section class="main-content">				
@@ -93,9 +130,20 @@
 								</tr>
 							</thead>
 							<tbody>
+								{% for item in cartDetails %}
 								<tr>
 									<td><input type="checkbox" value="option1"></td>
-									<td><a href="product_detail.html"><img alt="" src="themes/images/ladies/9.jpg"></a></td>
+									<td><a href="/product_detail/{{ item.product_id }}"><img src="{{url_for('static',filename='img/'+item.product.imageName)}}" alt="NOO : (" /></a></td>
+									<td>{{ item.product.name }}</td>
+									<td><input type="text" placeholder="{{ item.product_quantity }}" class="input-mini"></td>
+									<td>₹{{ item.product.price }}</td>
+									<td>₹{{ item.product_quantity * item.product.price }}</td>
+								</tr>
+								<!-- {{ totalPrice = totalPrice + (item.product_quantity * item.product.price) }} -->
+								{% endfor %}
+								<tr>
+									<td><input type="checkbox" value="option1"></td>
+									<td><a href="product_detail.html"><img alt="" src="{{url_for('static',filename='themes/images/ladies/9.jpg')}}"></a></td>
 									<td>Fusce id molestie massa</td>
 									<td><input type="text" placeholder="1" class="input-mini"></td>
 									<td>$2,350.00</td>
@@ -103,7 +151,7 @@
 								</tr>			  
 								<tr>
 									<td><input type="checkbox" value="option1"></td>
-									<td><a href="product_detail.html"><img alt="" src="themes/images/ladies/1.jpg"></a></td>
+									<td><a href="product_detail.html"><img alt="" src="{{url_for('static',filename='themes/images/ladies/1.jpg')}}"></a></td>
 									<td>Luctus quam ultrices rutrum</td>
 									<td><input type="text" placeholder="2" class="input-mini"></td>
 									<td>$1,150.00</td>
@@ -111,7 +159,7 @@
 								</tr>
 								<tr>
 									<td><input type="checkbox" value="option1"></td>
-									<td><a href="product_detail.html"><img alt="" src="themes/images/ladies/3.jpg"></a></td>
+									<td><a href="product_detail.html"><img alt="" src="{{url_for('static',filename='themes/images/ladies/3.jpg')}}"></a></td>
 									<td>Wuam ultrices rutrum</td>
 									<td><input type="text" placeholder="1" class="input-mini"></td>
 									<td>$1,210.00</td>
@@ -210,46 +258,44 @@
 						</div>						
 					</div>
 				</div>
-			</section>			
+			</section>
 			<section id="footer-bar">
 				<div class="row">
 					<div class="span3">
 						<h4>Navigation</h4>
 						<ul class="nav">
-							<li><a href="./index.html">Homepage</a></li>  
-							<li><a href="./about.html">About Us</a></li>
-							<li><a href="./contact.html">Contac Us</a></li>
-							<li><a href="./cart.html">Your Cart</a></li>
-							<li><a href="./register.html">Login</a></li>							
-						</ul>					
+							<li><a href="/">Homepage</a></li>  
+							<li><a href="/contact">Contact Us</a></li>
+							<li><a href="/cart">Your Cart</a></li>
+							{% if 'user' in session %}
+							<li><a href="/sell">Sell</a></li>
+							<li><a href="/logout">Logout</a></li>
+							{% else %}
+							<li><a href="/login">Login</a></li>
+							{% endif %}
+						</ul>
 					</div>
 					<div class="span4">
 						<h4>My Account</h4>
 						<ul class="nav">
-							<li><a href="#">My Account</a></li>
+							<li><a href="/account">My Account</a></li>
 							<li><a href="#">Order History</a></li>
 							<li><a href="#">Wish List</a></li>
 							<li><a href="#">Newsletter</a></li>
 						</ul>
 					</div>
 					<div class="span5">
-						<p class="logo"><img src="themes/images/logo.png" class="site_logo" alt=""></p>
-						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the  Lorem Ipsum has been the industry's standard dummy text ever since the you.</p>
+						<p class="logo"><img src="{{url_for('static',filename='themes/images/Volusion-Master-Logo.png')}}" class="site_logo" alt=""></p>
+						<p>A simple minimalistic shopping webapp made by the combined efforts of<br> <strong>Stanuj Khattar</strong> <br><strong>Mayank Musaddi</strong></p>
 						<br/>
-						<span class="social_icons">
-							<a class="facebook" href="#">Facebook</a>
-							<a class="twitter" href="#">Twitter</a>
-							<a class="skype" href="#">Skype</a>
-							<a class="vimeo" href="#">Vimeo</a>
-						</span>
 					</div>					
 				</div>	
 			</section>
 			<section id="copyright">
-				<span>Copyright 2013 bootstrappage template  All right reserved.</span>
+				<span>Copyright 2013 All right reserved.</span>
 			</section>
 		</div>
-		<script src="themes/js/common.js"></script>
+		<script src="{{url_for('static',filename='themes/js/common.js')}}"></script>	
 		<script>
 			$(document).ready(function() {
 				$('#checkout').click(function (e) {
