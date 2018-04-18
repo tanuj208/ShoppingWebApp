@@ -40,7 +40,7 @@ class Product(Base):
 
 	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
 	name=Column('name',String(255))
-	price=Column('price',String(255))
+	price=Column('price',Integer)
 	description=Column('description',String(1000))
 	quantity=Column('quantity',Integer)
 	imageName=Column('imageName',String(255))
@@ -184,9 +184,9 @@ def addProduct():
 		error=None
 		product=Product()
 		product.name=str(request.form['itemName'])
-		product.price=str(request.form['itemPrice'])
+		product.price=int(request.form['itemPrice'])
 		product.description=str(request.form['itemDescription'])
-		product.quantity=str(request.form['quantity'])
+		product.quantity=int(request.form['quantity'])
 		categoryName=str(request.form['categoryName'])
 		user=sqlsession.query(User).filter_by(username=session['user']).first()
 		seller=sqlsession.query(Seller).filter_by(id=user.id).first()
@@ -195,8 +195,13 @@ def addProduct():
 			product.imageName=images.save(request.files['image'])
 		except:
 			error="Upload image first"
-		if product.name=='' or product.price=='' or product.description=='' or product.quantity=='' or categoryName=='':
+		if product.name=='' or product.description=='' or categoryName=='':
 			error="Fields can't be empty"
+		elif product.quantity == 0:
+			error = "Add atleast one item"
+		elif product.quantity < 0 or product.price < 0:
+			error = "negative figures are not allowed"
+
 		if error:
 			return render_template('addProduct.html',error=error,categories=sqlsession.query(Category).all())
 		
@@ -214,18 +219,21 @@ def addProduct():
 def product_detail(productid=None):
 	if request.method == 'POST':
 		order=Order()
-		product_id = request.form['product_id']
-		product = sqlsession.query(Product).filter_by(id=product_id).first()
+		product = sqlsession.query(Product).filter_by(id=productid).first()
 		user = sqlsession.query(User).filter_by(username=session['user']).first()
 		order.user = user
 		order.product = product
-		order.product_quantity = request.form['product_quantity']
+		order.product_quantity = int(request.form['product_quantity'])
 		order.isOrdered = 0
 		stock = product.quantity
 		if stock == 0:
 			error = "Product is out of stock"
 		elif stock < order.product_quantity:
 			error = "Only " + str(stock) +" pieces are left"
+		elif order.product_quantity < 0:
+			error = "figures can't be negative"
+		sqlsession.add(order)
+		sqlsession.commit()
 		return render_template('product_detail.html',product=product)
 	product=sqlsession.query(Product).filter_by(id=productid).first()
 	return render_template('product_detail.html',product=product)
@@ -242,28 +250,23 @@ def category_filter(category_id=None,page_number=None):
 		startIndex=(page_number-1)*9-1;
 	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
-# @app.route('/cart')
-# @app.route('/cart/<username>')
-# def cart(username=None, methods=['POST','GET']):
-# 	if request.method == 'POST':
-# 		order=Order()
-# 		product_id = request.form['product_id']
-# 		product = sqlsession.query(Product).filter_by(id=product_id).first()
-# 		user = sqlsession.query(User).filter_by(username=session['user']).first()
-# 		order.user = user
-# 		order.product = product
-# 		order.product_quantity = request.form['product_quantity']
-# 		order.isOrdered = 0
-# 		stock = product.quantity
-# 		if stock == 0:
-# 			error = "Product is out of stock"
-# 		elif stock < order.product_quantity:
-# 			error = "Only " + str(stock) +" pieces are left"
-# 		return render_template('product_detail.html',product=product)
-# 	# return render_template('product_detail.html',product=product)
-# 	# user = sqlsession.query(User).filter_by(username=session['user']).first()
-# 	# cartDetails = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0).all()
-# 	# return render_template('cart.html',cartDetails=cartDetails,totalPrice=0,error=None)
+@app.route('/cart',methods=['POST','GET'])
+@app.route('/cart/<username>',methods=['POST','GET'])
+def cart(username=None):
+	user = sqlsession.query(User).filter_by(username=session['user']).first()
+	cartDetails = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0).all()
+	if request.method == 'POST':
+		ids=request.form.getlist("to_delete")
+		for itemId in ids:
+			toDelete=sqlsession.query(Order).filter_by(id=int(itemId)).first()
+			sqlsession.delete(toDelete)
+		sqlsession.commit()
+
+	cartDetails = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0).all()
+	totalPrice = 0
+	for item in cartDetails:
+		totalPrice=totalPrice+(int(item.product.price)*(int)(item.product_quantity))
+	return render_template('cart.html',cartDetails=cartDetails,totalPrice=totalPrice)
 
 @app.route('/usertable')
 def usertable():
