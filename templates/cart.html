@@ -143,12 +143,6 @@
 								</form>
  							</tbody>
 						</table>
-						<h4>What would you like to do next?</h4>
-						<p>Choose if you have a discount code or reward points you want to use.</p>
-						<label class="radio">
-							<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-							Use Coupon Code
-						</label>
 						<hr>
 						<p class="cart-total right">
 							<strong>Sub-Total</strong>:	₹{{totalPrice}}<br>
@@ -159,7 +153,7 @@
 						<p class="buttons center">				
 							<button class="btn" type="submit" form="delete">Update</button>
 							<button class="btn" type="button">Continue</button>
-							<button class="btn btn-inverse" type="submit" id="checkout">Checkout</button>
+							<button class="btn btn-inverse" action="/checkout/{{session['user']}}" type="submit" id="checkout">Checkout</button>
 						</p>					
 					</div>
 					<div class="span3 col">

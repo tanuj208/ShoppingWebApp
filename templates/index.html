@@ -38,7 +38,7 @@
 						<ul class="user-menu">	
 							<li><a href="/account">My Account</a></li>
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
-							<li><a href="/checkout">Checkout</a></li>
+							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
 							{% if 'user' in session %}
 							<li><a href="/sell">Sell</a></li>
 							<li><a href="/logout">Logout</a></li>

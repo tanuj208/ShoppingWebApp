@@ -137,9 +137,9 @@
 								{% if page_number > 1 %}
 									<li><a href="#/{{page_number-1}}">Prev</a></li>
 								{% endif %}
-								
+								{% if size>=1 %}
 								<li class="active"><a href="#">{{page_number}}</a></li>
-								
+								{% endif %}
 								{% if page_number*9 < size %}
 									<li><a href="#/{{page_number+1}}">{{page_number+1}}</a></li>
 								{% endif %}

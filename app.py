@@ -268,6 +268,11 @@ def cart(username=None):
 		totalPrice=totalPrice+(int(item.product.price)*(int)(item.product_quantity))
 	return render_template('cart.html',cartDetails=cartDetails,totalPrice=totalPrice)
 
+@app.route('/checkout',methods=['POST','GET'])
+@app.route('/checkout/<username>',methods=['POST','GET'])
+def checkout(username=None):
+	return render_template('checkout.html')
+
 @app.route('/usertable')
 def usertable():
 	user = sqlsession.query(User).all()
