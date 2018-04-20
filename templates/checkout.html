@@ -81,109 +81,38 @@
 				<div class="row">
 					<div class="span12">
 						<div class="accordion" id="accordion2">
-							<div class="accordion-group">
-								<div class="accordion-heading">
-									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Checkout Options</a>
-								</div>
-								<div id="collapseOne" class="accordion-body in collapse">
-									<div class="accordion-inner">
-										<div class="row-fluid">
-											<div class="span6">
-												<h4>New Customer</h4>
-												<p>By creating an account you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made.</p>
-												<form action="#" method="post">
-													<fieldset>
-														<label class="radio" for="register">
-															<input type="radio" name="account" value="register" id="register" checked="checked">Register Account
-														</label>
-														<label class="radio" for="guest">
-															<input type="radio" name="account" value="guest" id="guest">Guest Checkout
-														</label>
-														<br>
-														<button class="btn btn-inverse" data-toggle="collapse" data-parent="#collapse2">Continue</button>
-													</fieldset>
-												</form>
-											 </div>
-											 <div class="span6">
-												<h4>Returning Customer</h4>
-												<p>I am a returning customer</p>
-												<form action="#" method="post">
-													<fieldset>
-														<div class="control-group">
-															<label class="control-label">Username</label>
-															<div class="controls">
-																<input type="text" placeholder="Enter your username" id="username" class="input-xlarge">
-															</div>
-														</div>
-														<div class="control-group">
-															<label class="control-label">Password</label>
-															<div class="controls">
-															<input type="password" placeholder="Enter your password" id="password" class="input-xlarge">
-															</div>
-														</div>
-														<button class="btn btn-inverse">Continue</button>
-													</fieldset>
-												</form>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 
 							<div class="accordion-group">
 								<div class="accordion-heading">
 									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Account &amp; Billing Details</a>
 								</div>
-								<div id="collapseTwo" class="accordion-body collapse">
+								<div id="collapseTwo" class="accordion-body in collapse">
 									<div class="accordion-inner">
 										<div class="row-fluid">
 											<div class="span6">
 												<h4>Your Personal Details</h4>
 												<div class="control-group">
-													<label class="control-label">First Name</label>
+													<label class="control-label">Name</label>
 													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+														<input type="text" placeholder="{{user.name}}" class="input-xlarge" readonly>
 													</div>
 												</div>
-												<div class="control-group">
-													<label class="control-label">Last Name</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>					  
 												<div class="control-group">
 													<label class="control-label">Email Address</label>
 													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+														<input type="text" placeholder="{{user.email}}" class="input-xlarge" readonly>
 													</div>
 												</div>
 												<div class="control-group">
-													<label class="control-label">Telephone</label>
+													<label class="control-label">Phone</label>
 													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label">Fax</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+														<input type="text" placeholder="{{user.mobile}}" class="input-xlarge" readonly>
 													</div>
 												</div>
 											</div>
+
 											<div class="span6">
-												<h4>Your Address</h4>
-												<div class="control-group">
-													<label class="control-label">Company</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label">Company ID:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>					  
+												<h4>Your Address</h4>	  
 												<div class="control-group">
 													<label class="control-label"><span class="required">*</span> Address 1:</label>
 													<div class="controls">
@@ -248,12 +177,39 @@
 									<div class="accordion-inner">
 										<div class="row-fluid">
 											<div class="control-group">
-												<label for="textarea" class="control-label">Comments</label>
-												<div class="controls">
-													<textarea rows="3" id="textarea" class="span12"></textarea>
-												</div>
-											</div>									
-											<button class="btn btn-inverse pull-right">Confirm order</button>
+												<p><strong>Order Summary:</strong></p>
+												<table>
+												<strong>
+												<tr>
+												<th>Name:&emsp;&emsp;&emsp;</th>
+												<th>Quantity:&emsp;&emsp;&emsp;</th>
+												<th>Price:&emsp;&emsp;&emsp;</th>
+												<th>Total Price:&emsp;&emsp;&emsp;</th>
+												</tr>
+												</strong>
+
+												{% for item in cartDetails %}
+
+												<tr>
+												<td>{{ item.product.name }}</td>
+												<td>{{ item.product.quantity }}</td>
+												<td>₹{{ item.product.price }}</td>
+												<td>₹{{ item.product_quantity|int * item.product.price|int }}</td>
+												</tr>
+
+												{% endfor %}
+												</table>
+
+												<br>
+												<strong>Sub-Total</strong>:	₹{{totalPrice}}<br>
+												<strong>GST(17%)</strong>: ₹{{totalPrice*0.17}}<br>
+												<strong>Total</strong>: ₹{{totalPrice*1.17}}<br>
+												<br>
+												
+											</div>
+											<form method="POST" action="/checkout/session{{'user'}}">					
+											<button type='submit' class="btn btn-inverse pull-right">Confirm order</button>
+											</form>
 										</div>
 									</div>
 								</div>

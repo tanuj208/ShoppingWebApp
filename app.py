@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker,relationship
 from flask.ext.hashing import Hashing
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
+from datetime import datetime
 import os
 
 app=Flask(__name__)
@@ -71,6 +72,21 @@ class Order(Base):
 # 						Column('order_id',Integer,ForeignKey('order.id'))
 # 						Column('product_id',Integer,ForeignKey('product.id'))
 # 						)
+
+class Logs(Base):
+	__tablename__='logs'
+	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
+	date = Column('date',DateTime)
+	seller_id=Column('seller_id',Integer)
+	customer_id=Column('customer_id',Integer)
+	product_id=Column('product_id',Integer)
+	product_quantity=Column('product_quantity',Integer)
+	address1 = Column('address1',String(255))
+	address2 = Column('address2',String(255))
+	city = Column('city',String(255))
+	postcode = Column('postcode',String(255))
+	country = Column('country',String(255))
+	state = Column('state',String(255))
 
 engine=create_engine('sqlite:///user.db',echo=True)
 Base.metadata.create_all(bind=engine)
@@ -271,7 +287,22 @@ def cart(username=None):
 @app.route('/checkout',methods=['POST','GET'])
 @app.route('/checkout/<username>',methods=['POST','GET'])
 def checkout(username=None):
-	return render_template('checkout.html')
+	user = sqlsession.query(User).filter_by(username=session['user']).first()
+	cartDetails = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0).all()
+	totalPrice=0		
+	for item in cartDetails:
+		totalPrice=totalPrice+(int(item.product.price)*(int)(item.product_quantity))
+
+	if request.method == 'POST':
+		date=datetime.now()
+		for item in cartDetails:
+			item.date=date
+			item.isOrdered=1
+			product = sqlsession.query(Product).filter_by(id=item.product_id).first()
+			product.quantity-=item.product_quantity
+		return render_template('placed.html',totalPrice=(totalPrice*1.17))
+
+	return render_template('checkout.html',user=user,cartDetails=cartDetails,totalPrice=totalPrice)
 
 @app.route('/usertable')
 def usertable():

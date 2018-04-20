@@ -146,15 +146,15 @@
 						<hr>
 						<p class="cart-total right">
 							<strong>Sub-Total</strong>:	₹{{totalPrice}}<br>
-							<strong>GST(17%)</strong>: {{totalPrice*0.17}}<br>
+							<strong>GST(17%)</strong>: ₹{{totalPrice*0.17}}<br>
 							<strong>Total</strong>: ₹{{totalPrice*1.17}}<br>
 						</p>
 						<hr/>
 						<p class="buttons center">				
 							<button class="btn" type="submit" form="delete">Update</button>
-							<button class="btn" type="button">Continue</button>
-							<button class="btn btn-inverse" action="/checkout/{{session['user']}}" type="submit" id="checkout">Checkout</button>
-						</p>					
+							<button class="btn" type="button" onclick="window.location.href='/{{session['user']}}'">Continue</button>
+							<input type="button" class="btn btn-inverse" value="Checkout" onclick="window.location.href='/checkout/{{session['user']}}' " >
+						</p>
 					</div>
 					<div class="span3 col">
 						<div class="block">	
