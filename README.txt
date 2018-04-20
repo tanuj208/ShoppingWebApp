@@ -6,3 +6,4 @@ select * from <tablename>;
 
 pip3 install flask-hashing
 pip3 install flask-uploads
+pip3 install whooshalchemy

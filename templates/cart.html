@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Bootstrap E-commerce Templates</title>
+		<title>My cart</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -25,7 +25,7 @@
 			<script src="themes/js/respond.min.js"></script>
 		<![endif]-->
 	</head>
-    <body>		
+    <body>
 		<div id="top-bar" class="container">
 			<div class="row">
 				<div class="span4">
@@ -37,10 +37,12 @@
 				<div class="span8">
 					<div class="account pull-right">
 						<ul class="user-menu">	
+							<li><a href="/">Homepage</a></li>
+							<li><a href="/contact">Contact Us</a></li>
+							{% if 'user' in session %}
 							<li><a href="/account">My Account</a></li>
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
-							<li><a href="/checkout">Checkout</a></li>
-							{% if 'user' in session %}
+							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
 							<li><a href="/sell">Sell</a></li>
 							<li><a href="/logout">Logout</a></li>
 							<li><p>Hello {{ session['user'] }}</p></li>
@@ -50,7 +52,6 @@
 						</ul>
 					</div>
 				</div>
-
 			</div>
 		</div>
 
@@ -223,8 +224,8 @@
 						<ul class="nav">
 							<li><a href="/">Homepage</a></li>  
 							<li><a href="/contact">Contact Us</a></li>
-							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							{% if 'user' in session %}
+							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="/sell">Sell</a></li>
 							<li><a href="/logout">Logout</a></li>
 							{% else %}

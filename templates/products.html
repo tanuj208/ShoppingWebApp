@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Bootstrap E-commerce Templates</title>
+		<title>products</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -33,13 +33,16 @@
 						<input type="text" class="input-block-level search-query" Placeholder="eg. T-sirt">
 					</form>
 				</div>
+
 				<div class="span8">
 					<div class="account pull-right">
-						<ul class="user-menu">				
-							<li><a href="#">My Account</a></li>
-							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
-							<li><a href="checkout.html">Checkout</a></li>
+						<ul class="user-menu">	
+							<li><a href="/">Homepage</a></li>
+							<li><a href="/contact">Contact Us</a></li>
 							{% if 'user' in session %}
+							<li><a href="/account">My Account</a></li>
+							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
+							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
 							<li><a href="/sell">Sell</a></li>
 							<li><a href="/logout">Logout</a></li>
 							<li><p>Hello {{ session['user'] }}</p></li>
@@ -64,7 +67,7 @@
 									<li><a href="/category/2">Bottom wear</a></li>
 									<li><a href="/category/3">Foot wear</a></li>									
 									<li><a href="/category/4">Inner wear</a></li>									
-									<li><a href="/category/5">Watches</a></li>									
+									<li><a href="/category/5">Grooming</a></li>									
 									<li><a href="/category/6">Accessories</a></li>
 								</ul>
 							</li>
@@ -73,33 +76,32 @@
 									<li><a href="/category/7">Top wear</a></li>									
 									<li><a href="/category/8">Bottom wear</a></li>
 									<li><a href="/category/9">Foot wear</a></li>									
-									<li><a href="/category/10">Watches</a></li>									
-									<li><a href="/category/11">Grooming</a></li>									
-									<li><a href="/category/12">Accessories</a></li>
+									<li><a href="/category/10">Grooming</a></li>									
+									<li><a href="/category/11">Accessories</a></li>
 								</ul>
 							</li>
 							<li><a>Electronics</a>
 								<ul>
-									<li><a href="/category/13">Mobiles</a></li>									
-									<li><a href="/category/14">Laptops & PCs</a></li>
-									<li><a href="/category/15">Televisions</a></li>									
-									<li><a href="/category/16">Air Conditioners</a></li>
-									<li><a href="/category/17">Others</a></li>
+									<li><a href="/category/12">Mobiles</a></li>									
+									<li><a href="/category/13">Laptops & PCs</a></li>
+									<li><a href="/category/14">Televisions</a></li>									
+									<li><a href="/category/15">Air Conditioners</a></li>
+									<li><a href="/category/16">Others</a></li>
 								</ul>
 							</li>
 							<li><a>Home & Furniture</a>
 								<ul>
-									<li><a href="/category/18">Kitchen</a></li>									
-									<li><a href="/category/19">Furniture</a></li>
-									<li><a href="/category/20">Decor</a></li>									
-									<li><a href="/category/21">Others</a></li>
+									<li><a href="/category/17">Kitchen</a></li>									
+									<li><a href="/category/18">Furniture</a></li>
+									<li><a href="/category/19">Decor</a></li>									
+									<li><a href="/category/20">Others</a></li>
 								</ul>
 							</li>
 							<li><a>Sports, Books & More</a>
 								<ul>									
-									<li><a href="category/22">Sports</a></li>
-									<li><a href="category/23">Books</a></li>
-									<li><a href="category/24">Others</a></li>
+									<li><a href="category/21">Sports</a></li>
+									<li><a href="category/22">Books</a></li>
+									<li><a href="category/23">Others</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -248,8 +250,8 @@
 						<ul class="nav">
 							<li><a href="/">Homepage</a></li>  
 							<li><a href="/contact">Contact Us</a></li>
-							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							{% if 'user' in session %}
+							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="/sell">Sell</a></li>
 							<li><a href="/logout">Logout</a></li>
 							{% else %}

@@ -38,11 +38,13 @@
 
 				<div class="span8">
 					<div class="account pull-right">
-						<ul class="user-menu">				
-							<li><a href="#">My Account</a></li>
-							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
-							<li><a href="checkout.html">Checkout</a></li>
+						<ul class="user-menu">	
+							<li><a href="/">Homepage</a></li>
+							<li><a href="/contact">Contact Us</a></li>
 							{% if 'user' in session %}
+							<li><a href="/account">My Account</a></li>
+							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
+							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
 							<li><a href="/sell">Sell</a></li>
 							<li><a href="/logout">Logout</a></li>
 							<li><p>Hello {{ session['user'] }}</p></li>
@@ -52,33 +54,58 @@
 						</ul>
 					</div>
 				</div>
-
 			</div>
 		</div>
 		<div id="wrapper" class="container">
 			<section class="navbar main-menu">
 				<div class="navbar-inner main-menu">				
-					<a href="index.html" class="logo pull-left"><img src="themes/images/logo.png" class="site_logo" alt=""></a>
+					<a href="index.html" class="logo pull-left"><img src="{{url_for('static',filename='themes/images/Volusion-Master-Logo.png')}}" class="site_logo" alt=""></a>
+
 					<nav id="menu" class="pull-right">
 						<ul>
-							<li><a href="./products.html">Woman</a>					
+							<li><a>Women</a>					
 								<ul>
-									<li><a href="./products.html">Lacinia nibh</a></li>									
-									<li><a href="./products.html">Eget molestie</a></li>
-									<li><a href="./products.html">Varius purus</a></li>									
+									<li><a href="/category/1">Top wear</a></li>									
+									<li><a href="/category/2">Bottom wear</a></li>
+									<li><a href="/category/3">Foot wear</a></li>									
+									<li><a href="/category/4">Inner wear</a></li>									
+									<li><a href="/category/5">Grooming</a></li>									
+									<li><a href="/category/6">Accessories</a></li>
 								</ul>
-							</li>															
-							<li><a href="./products.html">Man</a></li>			
-							<li><a href="./products.html">Sport</a>
+							</li>
+							<li><a>Men</a>
+								<ul>
+									<li><a href="/category/7">Top wear</a></li>									
+									<li><a href="/category/8">Bottom wear</a></li>
+									<li><a href="/category/9">Foot wear</a></li>									
+									<li><a href="/category/10">Grooming</a></li>									
+									<li><a href="/category/11">Accessories</a></li>
+								</ul>
+							</li>
+							<li><a>Electronics</a>
+								<ul>
+									<li><a href="/category/12">Mobiles</a></li>									
+									<li><a href="/category/13">Laptops & PCs</a></li>
+									<li><a href="/category/14">Televisions</a></li>									
+									<li><a href="/category/15">Air Conditioners</a></li>
+									<li><a href="/category/16">Others</a></li>
+								</ul>
+							</li>
+							<li><a>Home & Furniture</a>
+								<ul>
+									<li><a href="/category/17">Kitchen</a></li>									
+									<li><a href="/category/18">Furniture</a></li>
+									<li><a href="/category/19">Decor</a></li>									
+									<li><a href="/category/20">Others</a></li>
+								</ul>
+							</li>
+							<li><a>Sports, Books & More</a>
 								<ul>									
-									<li><a href="./products.html">Gifts and Tech</a></li>
-									<li><a href="./products.html">Ties and Hats</a></li>
-									<li><a href="./products.html">Cold Weather</a></li>
+									<li><a href="category/21">Sports</a></li>
+									<li><a href="category/22">Books</a></li>
+									<li><a href="category/23">Others</a></li>
 								</ul>
-							</li>							
-							<li><a href="./products.html">Hangbag</a></li>
-							<li><a href="./products.html">Best Seller</a></li>
-							<li><a href="./products.html">Top Seller</a></li>
+							</li>
 						</ul>
 					</nav>
 				</div>
@@ -125,6 +152,11 @@
 									<label>Qty:</label>
 									<input type="number" name= "product_quantity" class="span1" value="1">
 									<input class="btn btn-inverse" type="submit" value="Add to cart">
+									{% if error %}
+									<p><div>
+										<p style="color:red;line-height: 0.6"> {{error}} </p>
+									</div></p>
+									{% endif %}
 								</form>
 							</div>							
 						</div>
@@ -317,37 +349,35 @@
 					<div class="span3">
 						<h4>Navigation</h4>
 						<ul class="nav">
-							<li><a href="./index.html">Homepage</a></li>  
-							<li><a href="./about.html">About Us</a></li>
-							<li><a href="./contact.html">Contac Us</a></li>
+							<li><a href="/">Homepage</a></li>  
+							<li><a href="/contact">Contact Us</a></li>
+							{% if 'user' in session %}
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
-							<li><a href="./register.html">Login</a></li>							
-						</ul>					
+							<li><a href="/sell">Sell</a></li>
+							<li><a href="/logout">Logout</a></li>
+							{% else %}
+							<li><a href="/login">Login</a></li>
+							{% endif %}
+						</ul>
 					</div>
 					<div class="span4">
 						<h4>My Account</h4>
 						<ul class="nav">
-							<li><a href="#">My Account</a></li>
+							<li><a href="/account">My Account</a></li>
 							<li><a href="#">Order History</a></li>
 							<li><a href="#">Wish List</a></li>
 							<li><a href="#">Newsletter</a></li>
 						</ul>
 					</div>
 					<div class="span5">
-						<p class="logo"><img src="themes/images/logo.png" class="site_logo" alt=""></p>
-						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the  Lorem Ipsum has been the industry's standard dummy text ever since the you.</p>
+						<p class="logo"><img src="{{url_for('static',filename='themes/images/Volusion-Master-Logo.png')}}" class="site_logo" alt=""></p>
+						<p>A simple minimalistic shopping webapp made by the combined efforts of<br> <strong>Tanuj Garg</strong> <br><strong>Mayank Musaddi</strong></p>
 						<br/>
-						<span class="social_icons">
-							<a class="facebook" href="#">Facebook</a>
-							<a class="twitter" href="#">Twitter</a>
-							<a class="skype" href="#">Skype</a>
-							<a class="vimeo" href="#">Vimeo</a>
-						</span>
 					</div>					
 				</div>	
 			</section>
 			<section id="copyright">
-				<span>Copyright 2013 bootstrappage template  All right reserved.</span>
+				<span>Copyright 2013 All right reserved.</span>
 			</section>
 		</div>
 		<script src="{{url_for('static',filename='themes/js/common.js')}}"></script>

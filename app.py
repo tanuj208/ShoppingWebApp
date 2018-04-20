@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker,relationship
 from flask.ext.hashing import Hashing
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from datetime import datetime
+from whooshalchemy import IndexService
 import os
 
 app=Flask(__name__)
@@ -13,7 +14,9 @@ hashing=Hashing(app)
 images=UploadSet('images', IMAGES)
 
 app.config['UPLOADED_IMAGES_DEST']='static/img'
+# app.config['WHOOSH_BASE'] = 'temp/'
 configure_uploads(app,images)
+config = {"WHOOSH_BASE": "tmp/whoosh"}
 
 class User(Base):
 	__tablename__ = "user"
@@ -38,6 +41,7 @@ class Seller(Base):
 
 class Product(Base):
 	__tablename__="product"
+	__searchable__ = ['name']
 
 	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
 	name=Column('name',String(255))
@@ -66,12 +70,6 @@ class Order(Base):
 	date = Column('date',DateTime)
 	isOrdered = Column('isOrdered',Integer)
 	# one means ordered otherwise in cart
-	# products=relationship('Product',backref='category')
-
-# order_products= Table('order_products',
-# 						Column('order_id',Integer,ForeignKey('order.id'))
-# 						Column('product_id',Integer,ForeignKey('product.id'))
-# 						)
 
 class Logs(Base):
 	__tablename__='logs'
@@ -88,10 +86,13 @@ class Logs(Base):
 	country = Column('country',String(255))
 	state = Column('state',String(255))
 
+# whoosh_index(app,Product)
 engine=create_engine('sqlite:///user.db',echo=True)
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 sqlsession = Session()
+index_service = IndexService(config=config, session=sqlsession)
+index_service.register_class(Product)
 
 @app.route('/')
 @app.route('/<username>')
@@ -234,25 +235,33 @@ def addProduct():
 @app.route('/product_detail/<productid>',methods=['POST','GET'])
 def product_detail(productid=None):
 	if request.method == 'POST':
-		order=Order()
+		error=None
 		product = sqlsession.query(Product).filter_by(id=productid).first()
 		user = sqlsession.query(User).filter_by(username=session['user']).first()
-		order.user = user
-		order.product = product
-		order.product_quantity = int(request.form['product_quantity'])
-		order.isOrdered = 0
+		order = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0,product_id=product.id).first()
 		stock = product.quantity
+		quantity = int(request.form['product_quantity'])
 		if stock == 0:
 			error = "Product is out of stock"
-		elif stock < order.product_quantity:
+		elif stock < quantity:
 			error = "Only " + str(stock) +" pieces are left"
-		elif order.product_quantity < 0:
-			error = "figures can't be negative"
-		sqlsession.add(order)
+		elif quantity <= 0:
+			error = "figures can't be negative or zero"
+		if error:
+			return render_template('product_detail.html',product=product,error=error)
+		if order == None:
+			order=Order()
+			order.user = user
+			order.product = product
+			order.product_quantity = quantity
+			order.isOrdered = 0
+			sqlsession.add(order)
+		else:
+			order.product_quantity += quantity
 		sqlsession.commit()
-		return render_template('product_detail.html',product=product)
+		return render_template('product_detail.html',product=product,error=None)
 	product=sqlsession.query(Product).filter_by(id=productid).first()
-	return render_template('product_detail.html',product=product)
+	return render_template('product_detail.html',product=product,error=None)
 
 @app.route('/category')
 @app.route('/category/<category_id>')
@@ -264,6 +273,20 @@ def category_filter(category_id=None,page_number=None):
 		startIndex = 0
 	else:
 		startIndex=(page_number-1)*9-1;
+	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
+
+@app.route('/search',methods=['POST','GET'])
+@app.route('/search/<page_number>',methods=['POST','GET'])
+def search(page_number=None):
+	text=request.form['search']
+	products=list(Product.search_query(text))
+	# products=sqlsession.query(Product).whoosh_search(text).all()
+	if page_number == None:
+		page_number = 1
+		startIndex = 0
+	else:
+		startIndex = (page_number-1)*9-1;
+	# return render_template('test.html',data1=text,data2="DD")
 	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
 @app.route('/cart',methods=['POST','GET'])
