@@ -300,6 +300,7 @@ def checkout(username=None):
 			item.isOrdered=1
 			product = sqlsession.query(Product).filter_by(id=item.product_id).first()
 			product.quantity-=item.product_quantity
+		sqlsession.commit()
 		return render_template('placed.html',totalPrice=(totalPrice*1.17))
 
 	return render_template('checkout.html',user=user,cartDetails=cartDetails,totalPrice=totalPrice)

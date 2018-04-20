@@ -112,57 +112,59 @@
 											</div>
 
 											<div class="span6">
-												<h4>Your Address</h4>	  
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> Address 1:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+												<form id="details" method="POST" action="/checkout/session{{'user'}}">					
+													<h4>Your Address</h4>	  
+													<div class="control-group">
+														<label class="control-label"><span class="required">*</span> Address 1:</label>
+														<div class="controls">
+															<input type="text" placeholder="" class="input-xlarge">
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label">Address 2:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+													<div class="control-group">
+														<label class="control-label">Address 2:</label>
+														<div class="controls">
+															<input type="text" placeholder="" class="input-xlarge">
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> City:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+													<div class="control-group">
+														<label class="control-label"><span class="required">*</span> City:</label>
+														<div class="controls">
+															<input type="text" placeholder="" class="input-xlarge">
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> Post Code:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+													<div class="control-group">
+														<label class="control-label"><span class="required">*</span> Post Code:</label>
+														<div class="controls">
+															<input type="text" placeholder="" class="input-xlarge">
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> Country:</label>
-													<div class="controls">
-														<select class="input-xlarge">
-															<option value="1">Afghanistan</option>
-															<option value="2">Albania</option>
-															<option value="3">Algeria</option>
-															<option value="4">American Samoa</option>
-															<option value="5">Andorra</option>
-															<option value="6">Angola</option>
-														</select>
+													<div class="control-group">
+														<label class="control-label"><span class="required">*</span> Country:</label>
+														<div class="controls">
+															<select class="input-xlarge">
+																<option value="1">Afghanistan</option>
+																<option value="2">Albania</option>
+																<option value="3">Algeria</option>
+																<option value="4">American Samoa</option>
+																<option value="5">Andorra</option>
+																<option value="6">Angola</option>
+															</select>
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> Region / State:</label>
-													<div class="controls">
-														<select name="zone_id" class="input-xlarge">
-															<option value=""> --- Please Select --- </option>
-															<option value="3513">Aberdeen</option>
-															<option value="3514">Aberdeenshire</option>
-															<option value="3515">Anglesey</option>
-															<option value="3516">Angus</option>
-															<option value="3517">Argyll and Bute</option>
-														</select>
+													<div class="control-group">
+														<label class="control-label"><span class="required">*</span> Region / State:</label>
+														<div class="controls">
+															<select name="zone_id" class="input-xlarge">
+																<option value=""> --- Please Select --- </option>
+																<option value="3513">Aberdeen</option>
+																<option value="3514">Aberdeenshire</option>
+																<option value="3515">Anglesey</option>
+																<option value="3516">Angus</option>
+																<option value="3517">Argyll and Bute</option>
+															</select>
+														</div>
 													</div>
-												</div>
+												</form>					
 											</div>
 										</div>
 									</div>
@@ -205,11 +207,9 @@
 												<strong>GST(17%)</strong>: ₹{{totalPrice*0.17}}<br>
 												<strong>Total</strong>: ₹{{totalPrice*1.17}}<br>
 												<br>
-												
+
 											</div>
-											<form method="POST" action="/checkout/session{{'user'}}">					
-											<button type='submit' class="btn btn-inverse pull-right">Confirm order</button>
-											</form>
+											<button type='submit' class="btn btn-inverse pull-right" form="details">Confirm order</button>
 										</div>
 									</div>
 								</div>
