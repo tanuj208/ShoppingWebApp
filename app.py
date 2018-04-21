@@ -5,18 +5,18 @@ from sqlalchemy.orm import sessionmaker,relationship
 from flask.ext.hashing import Hashing
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from datetime import datetime
-from whooshalchemy import IndexService
 import os
 
 app=Flask(__name__)
-Base = declarative_base()
 hashing=Hashing(app)
 images=UploadSet('images', IMAGES)
+engine=create_engine('sqlite:///user.db',echo=True)
+Session = sessionmaker(bind=engine)
+sqlsession = Session()
+Base = declarative_base()
 
 app.config['UPLOADED_IMAGES_DEST']='static/img'
-# app.config['WHOOSH_BASE'] = 'temp/'
 configure_uploads(app,images)
-config = {"WHOOSH_BASE": "tmp/whoosh"}
 
 class User(Base):
 	__tablename__ = "user"
@@ -40,12 +40,12 @@ class Seller(Base):
 	products=relationship('Product',backref='seller')
 
 class Product(Base):
-	__tablename__="product"
-	__searchable__ = ['name']
+	__tablename__ = 'product'
+	# __searchable__ = ['name']
 
 	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
-	name=Column('name',String(255))
-	price=Column('price',Integer)
+	name=Column('name',String(1000))
+	price=Column('price', Integer)
 	description=Column('description',String(1000))
 	quantity=Column('quantity',Integer)
 	imageName=Column('imageName',String(255))
@@ -86,13 +86,7 @@ class Logs(Base):
 	country = Column('country',String(255))
 	state = Column('state',String(255))
 
-# whoosh_index(app,Product)
-engine=create_engine('sqlite:///user.db',echo=True)
 Base.metadata.create_all(bind=engine)
-Session = sessionmaker(bind=engine)
-sqlsession = Session()
-index_service = IndexService(config=config, session=sqlsession)
-index_service.register_class(Product)
 
 @app.route('/')
 @app.route('/<username>')
@@ -275,18 +269,27 @@ def category_filter(category_id=None,page_number=None):
 		startIndex=(page_number-1)*9-1;
 	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
+@app.route('/price/<start_price>/<end_price>')
+@app.route('/price/<start_price>/<end_price>/<page_number>')
+def filter_by_price(start_price=None,end_price=None,page_number=None):
+	products=sqlsession.query(Product).filter(cast(Product.price, Integer) >= start_price, cast(Product.price, Integer) <= end_price).all()
+	if page_number == None:
+		page_number = 1
+		startIndex=0
+	else:
+		startIndex=(page_number-1)*9-1;
+	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
+
 @app.route('/search',methods=['POST','GET'])
 @app.route('/search/<page_number>',methods=['POST','GET'])
 def search(page_number=None):
 	text=request.form['search']
-	products=list(Product.search_query(text))
-	# products=sqlsession.query(Product).whoosh_search(text).all()
+	products=sqlsession.query(Product).filter(Product.name.like('%'+text+'%')).all()
 	if page_number == None:
 		page_number = 1
 		startIndex = 0
 	else:
 		startIndex = (page_number-1)*9-1;
-	# return render_template('test.html',data1=text,data2="DD")
 	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
 @app.route('/cart',methods=['POST','GET'])
