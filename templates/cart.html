@@ -38,9 +38,7 @@
 					<div class="account pull-right">
 						<ul class="user-menu">	
 							<li><a href="/">Homepage</a></li>
-							<li><a href="/contact">Contact Us</a></li>
 							{% if 'user' in session %}
-							<li><a href="/account">My Account</a></li>
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
 							<li><a href="/sell">Sell</a></li>
@@ -157,55 +155,6 @@
 							<input type="button" class="btn btn-inverse" value="Checkout" onclick="window.location.href='/checkout/{{session['user']}}' " >
 						</p>
 					</div>
-					<div class="span3 col">
-						<div class="block">	
-							<ul class="nav nav-list">
-								<li class="nav-header">Products by price</li>
-								<li><a href="/price/0/300"> &lt;₹300</a></li>
-								<li><a href="/price/300/500">₹300-₹500</a></li>
-								<li><a href="/price/500/700">₹500-₹700</a></li>
-								<li><a href="/price/700/1000">₹700-₹1000</a></li>
-								<li><a href="/price/1000/1000000">&gt;₹1000</a></li>
-							</ul>
-						</div>
-						<div class="block">
-							<h4 class="title">
-								<span class="pull-left"><span class="text">Randomize</span></span>
-								<span class="pull-right">
-									<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
-								</span>
-							</h4>
-							<div id="myCarousel" class="carousel slide">
-								<div class="carousel-inner">
-									<div class="active item">
-										<ul class="thumbnails listing-products">
-											<li class="span3">
-												<div class="product-box">
-													<span class="sale_tag"></span>												
-													<a href="product_detail.html"><img alt="" src="themes/images/ladies/2.jpg"></a><br/>
-													<a href="product_detail.html" class="title">Fusce id molestie massa</a><br/>
-													<a href="#" class="category">Suspendisse aliquet</a>
-													<p class="price">$261</p>
-												</div>
-											</li>
-										</ul>
-									</div>
-									<div class="item">
-										<ul class="thumbnails listing-products">
-											<li class="span3">
-												<div class="product-box">												
-													<a href="product_detail.html"><img alt="" src="themes/images/ladies/4.jpg"></a><br/>
-													<a href="product_detail.html" class="title">Tempor sem sodales</a><br/>
-													<a href="#" class="category">Urna nec lectus mollis</a>
-													<p class="price">$134</p>
-												</div>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>						
-					</div>
 				</div>
 			</section>
 			<section id="footer-bar">
@@ -214,7 +163,6 @@
 						<h4>Navigation</h4>
 						<ul class="nav">
 							<li><a href="/">Homepage</a></li>  
-							<li><a href="/contact">Contact Us</a></li>
 							{% if 'user' in session %}
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="/sell">Sell</a></li>
@@ -225,13 +173,6 @@
 						</ul>
 					</div>
 					<div class="span4">
-						<h4>My Account</h4>
-						<ul class="nav">
-							<li><a href="/account">My Account</a></li>
-							<li><a href="#">Order History</a></li>
-							<li><a href="#">Wish List</a></li>
-							<li><a href="#">Newsletter</a></li>
-						</ul>
 					</div>
 					<div class="span5">
 						<p class="logo"><img src="{{url_for('static',filename='themes/images/Volusion-Master-Logo.png')}}" class="site_logo" alt=""></p>

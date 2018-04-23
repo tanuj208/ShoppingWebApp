@@ -39,9 +39,7 @@
 					<div class="account pull-right">
 						<ul class="user-menu">	
 							<li><a href="/">Homepage</a></li>
-							<li><a href="/contact">Contact Us</a></li>
 							{% if 'user' in session %}
-							<li><a href="/account">My Account</a></li>
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
 							<li><a href="/sell">Sell</a></li>
@@ -155,7 +153,6 @@
 						<h4>Navigation</h4>
 						<ul class="nav">
 							<li><a href="/">Homepage</a></li>  
-							<li><a href="/contact">Contact Us</a></li>
 							{% if 'user' in session %}
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="/sell">Sell</a></li>
@@ -167,12 +164,6 @@
 					</div>
 					<div class="span4">
 						<h4>My Account</h4>
-						<ul class="nav">
-							<li><a href="/account">My Account</a></li>
-							<li><a href="#">Order History</a></li>
-							<li><a href="#">Wish List</a></li>
-							<li><a href="#">Newsletter</a></li>
-						</ul>
 					</div>
 					<div class="span5">
 						<p class="logo"><img src="{{url_for('static',filename='themes/images/Volusion-Master-Logo.png')}}" class="site_logo" alt=""></p>

@@ -231,6 +231,8 @@ def product_detail(productid=None):
 	if request.method == 'POST':
 		error=None
 		product = sqlsession.query(Product).filter_by(id=productid).first()
+		similarProducts = sqlsession.query(Product).filter_by(category=product.category).all()
+		size=len(similarProducts)
 		user = sqlsession.query(User).filter_by(username=session['user']).first()
 		order = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0,product_id=product.id).first()
 		stock = product.quantity
@@ -242,7 +244,7 @@ def product_detail(productid=None):
 		elif quantity <= 0:
 			error = "figures can't be negative or zero"
 		if error:
-			return render_template('product_detail.html',product=product,error=error)
+			return render_template('product_detail.html',product=product,similarProducts=similarProducts,size=size,error=error)
 		if order == None:
 			order=Order()
 			order.user = user
@@ -253,9 +255,11 @@ def product_detail(productid=None):
 		else:
 			order.product_quantity += quantity
 		sqlsession.commit()
-		return render_template('product_detail.html',product=product,error=None)
+		return render_template('product_detail.html',product=product,similarProducts=similarProducts,size=size,error=None)
 	product=sqlsession.query(Product).filter_by(id=productid).first()
-	return render_template('product_detail.html',product=product,error=None)
+	similarProducts = sqlsession.query(Product).filter_by(category=product.category).all()
+	size=len(similarProducts)
+	return render_template('product_detail.html',product=product,similarProducts=similarProducts,size=size,error=None)
 
 @app.route('/category')
 @app.route('/category/<category_id>')
@@ -266,18 +270,19 @@ def category_filter(category_id=None,page_number=None):
 		page_number = 1
 		startIndex = 0
 	else:
-		startIndex=(page_number-1)*9-1;
+		startIndex = (page_number-1)*9-1
 	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
+@app.route('/price')
 @app.route('/price/<start_price>/<end_price>')
 @app.route('/price/<start_price>/<end_price>/<page_number>')
 def filter_by_price(start_price=None,end_price=None,page_number=None):
 	products=sqlsession.query(Product).filter(cast(Product.price, Integer) >= start_price, cast(Product.price, Integer) <= end_price).all()
 	if page_number == None:
 		page_number = 1
-		startIndex=0
+		startIndex = 0
 	else:
-		startIndex=(page_number-1)*9-1;
+		startIndex = (page_number-1)*9 - 1;
 	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
 @app.route('/search',methods=['POST','GET'])

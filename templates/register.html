@@ -39,9 +39,7 @@
 					<div class="account pull-right">
 						<ul class="user-menu">	
 							<li><a href="/">Homepage</a></li>
-							<li><a href="/contact">Contact Us</a></li>
 							{% if 'user' in session %}
-							<li><a href="/account">My Account</a></li>
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
 							<li><a href="/sell">Sell</a></li>
@@ -144,7 +142,6 @@
 								<div class="control-group">
 									<input tabindex="3" class="btn btn-inverse large" type="submit" value="Sign into your account">
 									<hr>
-									<p class="reset">Recover your <a tabindex="4" href="#" title="Recover your username or password">username or password</a></p>
 								</div>
 							</fieldset>
 						</form>				
@@ -217,7 +214,6 @@
 						<h4>Navigation</h4>
 						<ul class="nav">
 							<li><a href="/">Homepage</a></li>  
-							<li><a href="/contact">Contact Us</a></li>
 							{% if 'user' in session %}
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
 							<li><a href="/sell">Sell</a></li>
@@ -228,13 +224,6 @@
 						</ul>
 					</div>
 					<div class="span4">
-						<h4>My Account</h4>
-						<ul class="nav">
-							<li><a href="/account">My Account</a></li>
-							<li><a href="#">Order History</a></li>
-							<li><a href="#">Wish List</a></li>
-							<li><a href="#">Newsletter</a></li>
-						</ul>
 					</div>
 					<div class="span5">
 						<p class="logo"><img src="{{url_for('static',filename='themes/images/Volusion-Master-Logo.png')}}" class="site_logo" alt=""></p>
