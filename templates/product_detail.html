@@ -119,7 +119,7 @@
 						<div class="row">
 							<div class="span4">
 
-								<a href="{{url_for('static',filename='img/'+product.imageName)}}" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="{{ product.imageName }}" src="{{url_for('static',filename='img/'+product.imageName)}}"></a>
+								<a href="{{url_for('static',filename='img/'+product.imageName)}}" class="thumbnail" data-fancybox-group="group1" title="{{product.name}}"><img alt="{{ product.imageName }}" src="{{url_for('static',filename='img/'+product.imageName)}}" style="height:25em;"></a>
 
 							</div>
 							<div class="span5">
@@ -146,7 +146,7 @@
 									  <input type="checkbox" value=""> Be sure to include why it's great
 									</label>
 									<p>&nbsp;</p>
-							<input type="hidden" name="product_id" id="product_id" value="{{ product.id }}">
+									<input type="hidden" name="product_id" id="product_id" value="{{ product.id }}">
 									<label>Qty:</label>
 									<input type="number" name= "product_quantity" class="span1" value="1">
 									<input class="btn btn-inverse" type="submit" value="Add to cart">
@@ -245,7 +245,7 @@
 					</div>
 					<div class="span5">
 						<p class="logo"><img src="{{url_for('static',filename='themes/images/Volusion-Master-Logo.png')}}" class="site_logo" alt=""></p>
-						<p>A simple minimalistic shopping webapp made by the combined efforts of<br> <strong>Tanuj Garg</strong> <br><strong>Mayank Musaddi</strong></p>
+						<p>A simple minimalistic shopping webapp made by the combined efforts of<br> <strong>STanuj Garg</strong> <br><strong>Mayank Musaddi</strong></p>
 						<br/>
 					</div>					
 				</div>	

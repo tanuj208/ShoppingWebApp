@@ -273,17 +273,28 @@ def category_filter(category_id=None,page_number=None):
 		startIndex = (page_number-1)*9-1
 	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
-@app.route('/price')
-@app.route('/price/<start_price>/<end_price>')
-@app.route('/price/<start_price>/<end_price>/<page_number>')
+@app.route('/price',methods=['POST','GET'])
+# @app.route('/price/<start_price>/<end_price>',methods=['POST','GET'])
+# @app.route('/price/<start_price>/<end_price>/<page_number>',methods=['POST','GET'])
 def filter_by_price(start_price=None,end_price=None,page_number=None):
-	products=sqlsession.query(Product).filter(cast(Product.price, Integer) >= start_price, cast(Product.price, Integer) <= end_price).all()
-	if page_number == None:
-		page_number = 1
-		startIndex = 0
-	else:
-		startIndex = (page_number-1)*9 - 1;
-	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
+	if request.method=='POST':
+		productIds=request.form.getlist("productIds")
+
+		start_price=request.form["start_price"]
+		end_price=request.form["end_price"]
+
+		products=[]
+		for productId in productIds:
+			product=sqlsession.query(Product).filter_by(id=productId).first()
+			if int(product.price) >= int(start_price) and int(product.price) <= int(end_price):
+				products.append(product)
+		# products=sqlsession.query(Product).filter(cast(Product.price, Integer) >= start_price, cast(Product.price, Integer) <= end_price).all()
+		if page_number == None:
+			page_number = 1
+			startIndex = 0
+		else:
+			startIndex = (page_number-1)*9 - 1;
+		return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
 @app.route('/search',methods=['POST','GET'])
 @app.route('/search/<page_number>',methods=['POST','GET'])

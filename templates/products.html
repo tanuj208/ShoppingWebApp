@@ -158,15 +158,24 @@
 							</ul>
 						</div>
 					</div>
+					<form id="my_form">
+					</form>
 					<div class="span3 col">
 						<div class="block">	
 							<ul class="nav nav-list">
 								<li class="nav-header">Products by price</li>
-								<li><a href="/price/0/300"> &lt;₹300</a></li>
-								<li><a href="/price/300/500">₹300-₹500</a></li>
-								<li><a href="/price/500/700">₹500-₹700</a></li>
-								<li><a href="/price/700/1000">₹700-₹1000</a></li>
-								<li><a href="/price/1000/1000000">&gt;₹1000</a></li>
+								<form id="filter" action="/price" method="POST">
+									<input type="hidden" name="start_price" value="" id="start_price" />
+  									<input type="hidden" name="end_price" value="" id="end_price" />
+									{% for product in products %}
+									<input type="hidden" value="{{product.id}}" name="productIds">
+									{% endfor %}
+									<li><a href="javascript:{}" onclick="submitForm(0,299)">&lt;₹300</a></li>
+									<li><a href="javascript:{}" onclick="submitForm(300,500)">₹300-₹500</a></li>
+									<li><a href="javascript:{}" onclick="submitForm(500,700)">₹500-₹700</a></li>
+									<li><a href="javascript:{}" onclick="submitForm(700,1000)">₹700-₹1000</a></li>
+									<li><a href="javascript:{}" onclick="submitForm(1001,10000000)">&gt;₹1000</a></li>
+								</form>
 							</ul>
 						</div>
 					</div>
@@ -201,5 +210,13 @@
 			</section>
 		</div>
 		<script src="{{url_for('static',filename='themes/js/common.js')}}"></script>	
+		<script type="text/javascript">
+			function submitForm(var1,var2)
+			{
+				document.getElementById('start_price').value = var1;
+				document.getElementById('end_price').value = var2;
+				document.getElementById('filter').submit();
+			}
+		</script>
     </body>
 </html>
