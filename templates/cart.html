@@ -40,7 +40,9 @@
 							<li><a href="/">Homepage</a></li>
 							{% if 'user' in session %}
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
+							{% if not error %}
 							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
+							{% endif %}
 							<li><a href="/sell">Sell</a></li>
 							<li><a href="/logout">Logout</a></li>
 							<li><p>Hello {{ session['user'] }}</p></li>
@@ -132,7 +134,7 @@
 									{% for item in cartDetails %}
 									<tr>
 										<td><input type="checkbox" value="{{item.id}}" name="to_delete"></td>
-										<td><a href="/product_detail/{{ item.product_id }}"><img src="{{ url_for('static',filename='img/'+item.product.imageName) }}" alt="NOO : (" /></a></td>
+										<td><a href="/product_detail/{{ item.product_id }}"><img src="{{ url_for('static',filename='img/'+item.product.imageName) }}" alt="NOO : (" style="height: 20em; width:15em"/></a></td>
 										<td>{{ item.product.name }}</td>
 										<td><input type="text" placeholder="{{ item.product_quantity }}" class="input-mini"></td>
 										<td>₹{{ item.product.price }}</td>
@@ -149,10 +151,17 @@
 							<strong>Total</strong>: ₹{{totalPrice*1.17}}<br>
 						</p>
 						<hr/>
+						{% if error %}
+							<p style="color:red;line-height:0.6"> {{error}} </p><br>
+						{% endif %}
 						<p class="buttons center">				
 							<button class="btn" type="submit" form="delete">Update</button>
 							<button class="btn" type="button" onclick="window.location.href='/{{session['user']}}'">Continue</button>
+							{% if error %}
+							<input type="button" class="btn-inverse" value="Checkout">
+							{% else %}
 							<input type="button" class="btn btn-inverse" value="Checkout" onclick="window.location.href='/checkout/{{session['user']}}' " >
+							{% endif %}
 						</p>
 					</div>
 				</div>

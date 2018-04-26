@@ -319,12 +319,23 @@ def cart(username=None):
 			toDelete=sqlsession.query(Order).filter_by(id=int(itemId)).first()
 			sqlsession.delete(toDelete)
 		sqlsession.commit()
-
 	cartDetails = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0).all()
 	totalPrice = 0
+	errorlist=[]
+	error=None
 	for item in cartDetails:
 		totalPrice=totalPrice+(int(item.product.price)*(int)(item.product_quantity))
-	return render_template('cart.html',cartDetails=cartDetails,totalPrice=totalPrice)
+		product = sqlsession.query(Product).filter_by(id=item.product_id).first()
+		if product.quantity-item.product_quantity < 0:
+			errorlist.append(product)
+			error = "The Following Products : "
+	for item in errorlist:
+		error+=item.name + "; "
+	if error:
+		error+="are not available. Please reduce quantity and try again!" 
+	if len(cartDetails) == 0:
+		error = "Cart is Empty!!! Add Products to Checkout"
+	return render_template('cart.html',cartDetails=cartDetails,totalPrice=totalPrice,error=error)
 
 @app.route('/checkout',methods=['POST','GET'])
 @app.route('/checkout/<username>',methods=['POST','GET'])

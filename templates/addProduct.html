@@ -41,7 +41,6 @@
 							<li><a href="/">Homepage</a></li>
 							{% if 'user' in session %}
 							<li><a href="/cart/{{ session['user'] }}">Your Cart</a></li>
-							<li><a href="/checkout/{{session['user']}}">Checkout</a></li>
 							<li><a href="/sell">Sell</a></li>
 							<li><a href="/logout">Logout</a></li>
 							<li><p>Hello {{ session['user'] }}</p></li>
