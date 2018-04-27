@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+
+<h2 style = "text-align: center;">{{ message }}</h2>
+<body link="blue">
+
+<fieldset>
+<legend>User Details</legend>
+	<table border = 1 cellspacing=5 width=50% height=50px bgcolor="#ffff9f">
+	<tr>
+		<th>ID</td>
+		<th>Date</th>
+		<th>Seller</td>
+		<th>Customer</td>
+		<th>Product</td>
+		<th>Address</td>
+	</tr>
+
+	{% for row in rows if row["id"] %}
+	<tr>
+		<td>{{row.id }}</td>
+		<td>{{row.date }}</td>
+		<td>{{row.seller.name }}</td>
+		<td>{{row.user.name }}</td>
+		<td>{{row.product.name }}</td>
+		<td>{{row.address1 }}</td>
+	</tr>
+	{% else %}
+	<h1> No Logs found! :( </h1>
+	{% endfor %}
+	</table>
+</fieldset>
+
+<br><a href = "/">Go back to home page</a>
+</body>
+
+</html>
