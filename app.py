@@ -1,92 +1,17 @@
 from flask import *
 from sqlalchemy import *
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker,relationship
 from flask.ext.hashing import Hashing
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from datetime import datetime
+from model import *
 import os
 
 app=Flask(__name__)
 hashing=Hashing(app)
 images=UploadSet('images', IMAGES)
-engine=create_engine('sqlite:///user.db',echo=True)
-Session = sessionmaker(bind=engine)
-sqlsession = Session()
-Base = declarative_base()
 
 app.config['UPLOADED_IMAGES_DEST']='static/img'
 configure_uploads(app,images)
-
-class User(Base):
-	__tablename__ = "user"
-
-	id = Column('id', Integer,Sequence('user_id_seq'),primary_key=True)
-	username=Column('username',String(255))
-	name = Column('name',String(255))
-	email = Column('email',String(255))
-	mobile = Column('mobile',String(15))
-	password = Column('password',String(255))
-	isFormFilled=Column('isFormFilled',Integer)
-	orders=relationship('Order',backref='user')
-
-class Seller(Base):
-	__tablename__="seller"
-
-	# seller.id is same as user.id
-	id=Column('id',Integer,primary_key=True)
-	businessname=Column('businessname',String(255))
-	shopaddress=Column('shopaddress',String(255))
-	products=relationship('Product',backref='seller')
-
-class Product(Base):
-	__tablename__ = 'product'
-	# __searchable__ = ['name']
-
-	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
-	name=Column('name',String(1000))
-	price=Column('price', Integer)
-	description=Column('description',String(1000))
-	quantity=Column('quantity',Integer)
-	imageName=Column('imageName',String(255))
-	category_id=Column('category_id',Integer,ForeignKey('category.id'))
-	seller_id=Column('seller_id',Integer,ForeignKey('seller.id'))
-	orders=relationship('Order',backref='product')
-
-class Category(Base):
-	__tablename__="category"
-
-	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
-	name = Column('name',String(255))
-	products=relationship('Product',backref='category')
-
-class Order(Base):
-	__tablename__="order"
-
-	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
-	user_id=Column('user_id',Integer,ForeignKey('user.id'))
-	product_id = Column('product_id',Integer,ForeignKey('product.id'))
-	product_quantity = Column('product_quantity',Integer)
-	date = Column('date',DateTime)
-	isOrdered = Column('isOrdered',Integer)
-	# one means ordered otherwise in cart
-
-class Logs(Base):
-	__tablename__='logs'
-	id=Column('id',Integer,Sequence('user_id_seq'),primary_key=True)
-	date = Column('date',DateTime)
-	seller_id=Column('seller_id',Integer)
-	customer_id=Column('customer_id',Integer)
-	product_id=Column('product_id',Integer)
-	product_quantity=Column('product_quantity',Integer)
-	address1 = Column('address1',String(255))
-	address2 = Column('address2',String(255))
-	city = Column('city',String(255))
-	postcode = Column('postcode',String(255))
-	country = Column('country',String(255))
-	state = Column('state',String(255))
-
-Base.metadata.create_all(bind=engine)
 
 @app.route('/')
 @app.route('/<username>')
@@ -132,15 +57,15 @@ def signup():
 		user.isFormFilled=0
 
 		if user.username=='' or user.email=='' or user.name=='' or user.mobile=='' or password=='' or confirm=='':
-			error="Field can't be empty"
+			error="Fields can't be empty"
 		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(password):
-			error="Password can't contain special charaters"
+			error="Password can't contain special characters"
 		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.username):
-			error="Username can't contain special charaters"
+			error="Username can't contain special characters"
 		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.name):
-			error="Name can't contain special charaters"
+			error="Name can't contain special characters"
 		elif set('[~!@#$%^&*()-_+={}":;\']+$\\/.,<>').intersection(user.mobile):
-			error="Mobile can't contain special charaters"
+			error="Mobile can't contain special characters"
 		elif len(password)<8:
 			error="Password should be more than 8 characters"
 		elif confirm!=password:
@@ -172,7 +97,7 @@ def sell():
 		seller.shopaddress=str(request.form['shopaddress'])
 
 		if seller.shopaddress=='' or seller.businessname=='':
-			error="Field can't be empty"
+			error="Fields can't be empty"
 		elif sqlsession.query(Seller).filter_by(businessname=seller.businessname).first() is not None:
 			error="Businessname already exists"
 		if error:
@@ -211,7 +136,7 @@ def addProduct():
 		elif product.quantity == 0:
 			error = "Add atleast one item"
 		elif product.quantity < 0 or product.price < 0:
-			error = "negative figures are not allowed"
+			error = "Negative figures are not allowed"
 
 		if error:
 			return render_template('addProduct.html',error=error,categories=sqlsession.query(Category).all())
@@ -233,11 +158,11 @@ def product_detail(productid=None):
 		product = sqlsession.query(Product).filter_by(id=productid).first()
 		similarProducts = sqlsession.query(Product).filter_by(category=product.category).all()
 		size=len(similarProducts)
-		user = sqlsession.query(User).filter_by(username=session['user']).first()
-		order = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0,product_id=product.id).first()
 		stock = product.quantity
 		quantity = int(request.form['product_quantity'])
-		if stock == 0:
+		if "user" not in session:
+			error = "Please login first"
+		elif stock == 0:
 			error = "Product is out of stock"
 		elif stock < quantity:
 			error = "Only " + str(stock) +" pieces are left"
@@ -245,6 +170,8 @@ def product_detail(productid=None):
 			error = "figures can't be negative or zero"
 		if error:
 			return render_template('product_detail.html',product=product,similarProducts=similarProducts,size=size,error=error)
+		user = sqlsession.query(User).filter_by(username=session['user']).first()
+		order = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0,product_id=product.id).first()
 		if order == None:
 			order=Order()
 			order.user = user
@@ -274,8 +201,6 @@ def category_filter(category_id=None,page_number=None):
 	return render_template('products.html',products=products,startIndex=startIndex,size=len(products),page_number=page_number)
 
 @app.route('/price',methods=['POST','GET'])
-# @app.route('/price/<start_price>/<end_price>',methods=['POST','GET'])
-# @app.route('/price/<start_price>/<end_price>/<page_number>',methods=['POST','GET'])
 def filter_by_price(start_price=None,end_price=None,page_number=None):
 	if request.method=='POST':
 		productIds=request.form.getlist("productIds")
@@ -288,7 +213,6 @@ def filter_by_price(start_price=None,end_price=None,page_number=None):
 			product=sqlsession.query(Product).filter_by(id=productId).first()
 			if int(product.price) >= int(start_price) and int(product.price) <= int(end_price):
 				products.append(product)
-		# products=sqlsession.query(Product).filter(cast(Product.price, Integer) >= start_price, cast(Product.price, Integer) <= end_price).all()
 		if page_number == None:
 			page_number = 1
 			startIndex = 0
@@ -343,20 +267,50 @@ def checkout(username=None):
 	user = sqlsession.query(User).filter_by(username=session['user']).first()
 	cartDetails = sqlsession.query(Order).filter_by(user_id=user.id,isOrdered=0).all()
 	totalPrice=0		
+	error=None
 	for item in cartDetails:
 		totalPrice=totalPrice+(int(item.product.price)*(int)(item.product_quantity))
 
 	if request.method == 'POST':
 		date=datetime.now()
+
+		address1=request.form['address1']
+		address2=request.form['address2']
+		city=request.form['city']
+		postcode=request.form['postcode']
+		country=request.form['country']
+		state=request.form['state']
+
+
+		if address1=='' or city=='' or postcode=='' or country=='' or state=='':
+			error="Fields can't be empty"
+		if error:
+			return render_template('checkout.html',user=user,cartDetails=cartDetails,totalPrice=totalPrice,error=error)
+
 		for item in cartDetails:
 			item.date=date
 			item.isOrdered=1
 			product = sqlsession.query(Product).filter_by(id=item.product_id).first()
 			product.quantity-=item.product_quantity
+
+			log=Logs()
+			log.date=date
+			log.seller=product.seller
+			log.user=user
+			log.product=product
+			log.product_quantity=item.product_quantity
+			log.address1=address1
+			log.address2=address2
+			log.city=city
+			log.postcode=postcode
+			log.country=country
+			log.state=state
+			sqlsession.add(log)
+
 		sqlsession.commit()
 		return render_template('placed.html',totalPrice=(totalPrice*1.17))
 
-	return render_template('checkout.html',user=user,cartDetails=cartDetails,totalPrice=totalPrice)
+	return render_template('checkout.html',user=user,cartDetails=cartDetails,totalPrice=totalPrice,error=None)
 
 @app.route('/usertable')
 def usertable():
@@ -377,6 +331,11 @@ def productTable():
 def orderTable():
 	orders=sqlsession.query(Order).all()
 	return render_template('orderTable.html',rows=orders,message="ORDERS ::")
+
+@app.route('/logs')
+def logs():
+	logs=sqlsession.query(Logs).all()
+	return render_template('log.html',rows=logs,message="LOGS ::")
 
 if __name__=='__main__':
 	app.secret_key=os.urandom(12)

@@ -136,7 +136,7 @@
 										<td><input type="checkbox" value="{{item.id}}" name="to_delete"></td>
 										<td><a href="/product_detail/{{ item.product_id }}"><img src="{{ url_for('static',filename='img/'+item.product.imageName) }}" alt="NOO : (" style="height: 20em; width:15em"/></a></td>
 										<td>{{ item.product.name }}</td>
-										<td><input type="text" placeholder="{{ item.product_quantity }}" class="input-mini"></td>
+										<td>{{ item.product_quantity }}</td>
 										<td>₹{{ item.product.price }}</td>
 										<td>₹{{ item.product_quantity|int * item.product.price|int }}</td>
 									</tr>

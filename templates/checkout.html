@@ -150,53 +150,45 @@
 													<div class="control-group">
 														<label class="control-label"><span class="required">*</span> Address 1:</label>
 														<div class="controls">
-															<input type="text" placeholder="" class="input-xlarge">
+															<input type="text" placeholder="" class="input-xlarge" name="address1">
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label">Address 2:</label>
 														<div class="controls">
-															<input type="text" placeholder="" class="input-xlarge">
+															<input type="text" placeholder="" class="input-xlarge" name="address2">
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required">*</span> City:</label>
 														<div class="controls">
-															<input type="text" placeholder="" class="input-xlarge">
+															<input type="text" placeholder="" class="input-xlarge" name="city">
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required">*</span> Post Code:</label>
 														<div class="controls">
-															<input type="text" placeholder="" class="input-xlarge">
+															<input type="text" placeholder="" class="input-xlarge" name="postcode">
 														</div>
 													</div>
+
 													<div class="control-group">
 														<label class="control-label"><span class="required">*</span> Country:</label>
 														<div class="controls">
-															<select class="input-xlarge">
-																<option value="1">Afghanistan</option>
-																<option value="2">Albania</option>
-																<option value="3">Algeria</option>
-																<option value="4">American Samoa</option>
-																<option value="5">Andorra</option>
-																<option value="6">Angola</option>
-															</select>
+															<input type="text" placeholder="" class="input-xlarge" name="country">
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required">*</span> Region / State:</label>
 														<div class="controls">
-															<select name="zone_id" class="input-xlarge">
-																<option value=""> --- Please Select --- </option>
-																<option value="3513">Aberdeen</option>
-																<option value="3514">Aberdeenshire</option>
-																<option value="3515">Anglesey</option>
-																<option value="3516">Angus</option>
-																<option value="3517">Argyll and Bute</option>
-															</select>
+															<input type="text" placeholder="" class="input-xlarge" name="state">
 														</div>
 													</div>
+
+													{% if error %}
+													<p style="color:red;line-height:0.6"> {{error}} </p><br>
+													{% endif %}
+
 												</form>					
 											</div>
 										</div>
