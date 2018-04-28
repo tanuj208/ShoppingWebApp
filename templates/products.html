@@ -134,25 +134,25 @@
 						<div class="pagination pagination-small pagination-centered">
 							<ul>
 								{% if page_number > 1 %}
-									<li><a href="#/{{page_number-1}}">Prev</a></li>
+									<li><a href="{{url}}/{{page_number-1}}">Prev</a></li>
 								{% endif %}
 								{% if size>=1 %}
-								<li class="active"><a href="#">{{page_number}}</a></li>
+								<li class="active"><a href="{{url}}">{{page_number}}</a></li>
 								{% endif %}
 								{% if page_number*9 < size %}
-									<li><a href="#/{{page_number+1}}">{{page_number+1}}</a></li>
+									<li><a href="{{url}}/{{page_number+1}}">{{page_number+1}}</a></li>
 								{% endif %}
 
 								{% if (page_number+1)*9 < size %}
-									<li><a href="#/{{page_number+2}}">{{page_number+2}}</a></li>
+									<li><a href="{{url}}/{{page_number+2}}">{{page_number+2}}</a></li>
 								{% endif %}
 								
 								{% if (page_number+2)*9 < size %}
-									<li><a href="#/{{page_number+3}}">{{page_number+3}}</a></li>
+									<li><a href="{{url}}/{{page_number+3}}">{{page_number+3}}</a></li>
 								{% endif %}
 								
 								{% if page_number*9 < size %}
-									<li><a href="#/{{page_number+4}}">Next</a></li>
+									<li><a href="{{url}}/{{page_number+1}}">Next</a></li>
 								{% endif %}
 							</ul>
 						</div>

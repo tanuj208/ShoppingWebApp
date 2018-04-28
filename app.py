@@ -214,8 +214,10 @@ def category_filter(category_id=None, page_number=None):
         page_number = 1
         startIndex = 0
     else:
+        page_number = int(page_number)
         startIndex = (page_number-1)*9-1
-    return render_template('products.html', products=products, startIndex=startIndex, size=len(products), page_number=page_number)
+    url="/category/"+str(category_id)
+    return render_template('products.html', products=products, startIndex=startIndex, size=len(products), page_number=page_number,url=url)
 
 
 @app.route('/price', methods=['POST', 'GET'])
@@ -236,7 +238,8 @@ def filter_by_price(start_price=None, end_price=None, page_number=None):
             startIndex = 0
         else:
             startIndex = (page_number-1)*9 - 1
-        return render_template('products.html', products=products, startIndex=startIndex, size=len(products), page_number=page_number)
+        url="/price"
+        return render_template('products.html', products=products, startIndex=startIndex, size=len(products), page_number=page_number,url=url)
 
 
 @app.route('/search', methods=['POST', 'GET'])
@@ -250,7 +253,8 @@ def search(page_number=None):
         startIndex = 0
     else:
         startIndex = (page_number-1)*9-1
-    return render_template('products.html', products=products, startIndex=startIndex, size=len(products), page_number=page_number)
+    url="/search"
+    return render_template('products.html', products=products, startIndex=startIndex, size=len(products), page_number=page_number,url=url)
 
 
 @app.route('/cart', methods=['POST', 'GET'])
