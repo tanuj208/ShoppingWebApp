@@ -1,7 +1,7 @@
 from flask import *
 from sqlalchemy import *
-from flask.ext.hashing import Hashing
-from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
+from flask_hashing import Hashing
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 from datetime import datetime
 from model import *
 import os
