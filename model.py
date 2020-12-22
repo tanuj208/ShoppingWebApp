@@ -1,10 +1,11 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from flask import *
+from sqlalchemy.pool import SingletonThreadPool
 from sqlalchemy import *
 
 Base = declarative_base()
-engine = create_engine('sqlite:///user.db', echo=True)
+engine = create_engine('sqlite:///user.db', echo=True, poolclass=SingletonThreadPool, connect_args={"check_same_thread": False})
 Session = sessionmaker(bind=engine)
 sqlsession = Session()
 
